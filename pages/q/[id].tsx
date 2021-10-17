@@ -1,13 +1,7 @@
 import { supabase } from "../../utils/supabaseClient";
 import Hashids from "hashids";
+import { Quiz } from "../../types";
 const hashids = new Hashids();
-
-type Quiz = {
-  description: string;
-  start_code: string;
-  target_output: string;
-  language: string;
-};
 
 export async function getServerSideProps({ params }) {
   const id: string = params.id;
@@ -28,7 +22,11 @@ export async function getServerSideProps({ params }) {
   };
 }
 
-export default function Quiz({ quiz }) {
+type PropTypes = {
+  quiz: Quiz
+}
+
+export default function ShowQuiz({ quiz }: PropTypes) {
   return (
     <div className="max-w-4xl px-4 py-8 mx-auto sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">

@@ -11,6 +11,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
     "@supabase/supabase-js": "^1.24.0",
+    "@tailwindcss/forms": "^0.3.4",
     "hashids": "^2.2.8",
     "next": "latest",
     "react": "^17.0.2",
