@@ -4,8 +4,9 @@ import { Quiz } from "../../types";
 const hashids = new Hashids();
 import React, { useEffect, useRef, useState } from "react";
 import RunCodeEditor from "../../components/RunCodeEditor";
-import Script, { initScriptLoader } from "next/script";
+import { initScriptLoader } from "next/script";
 import { createTSClient } from "@run-wasm/ts";
+import Reward, { RewardElement } from "react-rewards";
 
 export async function getServerSideProps({ params }) {
   const id: string = params.id;
@@ -32,6 +33,8 @@ declare global {
   }
 
   interface Console {
+    // Note: use oldLog instead of log after loading TSClient!
+    // See https://github.com/slipHQ/run-wasm/issues/101
     oldLog: (message?: any, ...optionalParams: any[]) => void;
   }
 }
@@ -49,6 +52,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
   const [isLoading, setIsLoading] = useState(false);
   const [output, setOutput] = useState<Array<string>>([]);
   const [errors, setErrors] = useState<Array<string>>([]);
+  const rewardRef = useRef<RewardElement>()
 
   function initialiseTsClient() {
     const tsClient = createTSClient(window.ts);
@@ -58,7 +62,6 @@ export default function ShowQuiz({ quiz }: PropTypes) {
   }
 
   useEffect(() => {
-    // handle client side navigation whenever that comes
     if (typeof window.ts === "undefined") {
       initScriptLoader([
         {
@@ -72,9 +75,16 @@ export default function ShowQuiz({ quiz }: PropTypes) {
   }, []);
 
   const runCode = async () => {
-    const { output, errors } = await tsClient.run({ code: codeRef.current });
+    const { output, errors }: { output: string[]; errors: string[] } =
+      await tsClient.run({ code: codeRef.current });
     setOutput(output);
     setErrors(errors);
+    if (errors.length == 0) {
+      const lastOutput = output[output.length - 1];
+      if (lastOutput == quiz.target_output) {
+        rewardRef.current.rewardMe()
+      }
+    }
   };
 
   return (
@@ -102,16 +112,20 @@ export default function ShowQuiz({ quiz }: PropTypes) {
           <div className="pt-8 ">
             <div className="grid items-start justify-left">
               <div className="relative group">
-                <button
-                  className="relative flex items-center py-4 leading-none bg-black divide-x divide-gray-600 rounded-lg px-7 border-gray-300 disabled:bg-gray-700 disabled:cursor-not-allowed"
-                  onClick={runCode} // runCode(inputCodeRef.current)}
-                  disabled={isLoading}
+                <Reward
+                  ref={(ref) => {rewardRef.current = ref}}
+                  type="confetti"
                 >
-                  <span className="text-gray-100 transition duration-200 group-hover:text-gray-100">
-                    {/* {!isLoading ? 'Run Code →' : `Loading ${languageLabel}...`} */}
-                    Run Code →
-                  </span>
-                </button>
+                  <button
+                    className="relative flex items-center py-4 leading-none bg-black divide-x divide-gray-600 rounded-lg px-7 border-gray-300 disabled:bg-gray-700 disabled:cursor-not-allowed"
+                    onClick={runCode} // runCode(inputCodeRef.current)}
+                    disabled={isLoading}
+                  >
+                    <span className="text-gray-100 transition duration-200 group-hover:text-gray-100">
+                      {!isLoading ? 'Run Code →' : `Loading TypeScript...`}
+                    </span>
+                  </button>
+                </Reward>
               </div>
             </div>
           </div>
