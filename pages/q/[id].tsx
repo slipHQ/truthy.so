@@ -76,6 +76,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
   }, []);
 
   const runCode = async () => {
+    setIsLoading(true)
     setSuccess(false)
     const { output, errors }: { output: string[]; errors: string[] } =
       await tsClient.run({ code: codeRef.current });
@@ -87,6 +88,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
         setSuccess(true)
       }
     }
+    setIsLoading(false)
   };
 
   // From https://daniel-lundin.github.io/react-dom-confetti/
@@ -135,7 +137,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
                   >
                     <Confetti active={ success } config={confettiConfig} />
                     <span className="text-gray-100 transition duration-200 group-hover:text-gray-100">
-                      {!isLoading ? "Run Code →" : `Loading TypeScript...`}
+                      {!isLoading ? "Run Code →" : "Running..."}
                     </span>
                   </button>
                 </div>
