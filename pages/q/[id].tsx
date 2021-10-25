@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from "react";
 import RunCodeEditor from "../../components/RunCodeEditor";
 import { initScriptLoader } from "next/script";
 import { createTSClient } from "@run-wasm/ts";
-import Confetti from 'react-dom-confetti';
+import Confetti, { ConfettiConfig } from 'react-dom-confetti';
 
 
 export async function getServerSideProps({ params }) {
@@ -90,17 +90,16 @@ export default function ShowQuiz({ quiz }: PropTypes) {
   };
 
   // From https://daniel-lundin.github.io/react-dom-confetti/
-  const confettiConfig = {
+  const confettiConfig: ConfettiConfig = {
     angle: 90,
-    spread: "100",
-    startVelocity: "34",
-    elementCount: "81",
-    dragFriction: "0.11",
-    duration: "3000",
-    stagger: "3",
+    spread: 100,
+    startVelocity: 34,
+    elementCount: 81,
+    dragFriction: 0.11,
+    duration: 3000,
+    stagger: 3,
     width: "10px",
     height: "10px",
-    perspective: "1000px",
     colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
   };
 
