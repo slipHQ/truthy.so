@@ -6,7 +6,8 @@ import React, { useEffect, useRef, useState } from "react";
 import RunCodeEditor from "../../components/RunCodeEditor";
 import { initScriptLoader } from "next/script";
 import { createTSClient } from "@run-wasm/ts";
-import Reward, { RewardElement } from "react-rewards";
+import Confetti from 'react-dom-confetti';
+
 
 export async function getServerSideProps({ params }) {
   const id: string = params.id;
@@ -52,7 +53,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
   const [isLoading, setIsLoading] = useState(false);
   const [output, setOutput] = useState<Array<string>>([]);
   const [errors, setErrors] = useState<Array<string>>([]);
-  const rewardRef = useRef<RewardElement>()
+  const [success, setSuccess] = useState(false);
 
   function initialiseTsClient() {
     const tsClient = createTSClient(window.ts);
@@ -75,6 +76,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
   }, []);
 
   const runCode = async () => {
+    setSuccess(false)
     const { output, errors }: { output: string[]; errors: string[] } =
       await tsClient.run({ code: codeRef.current });
     setOutput(output);
@@ -82,9 +84,24 @@ export default function ShowQuiz({ quiz }: PropTypes) {
     if (errors.length == 0) {
       const lastOutput = output[output.length - 1];
       if (lastOutput == quiz.target_output) {
-        rewardRef.current.rewardMe()
+        setSuccess(true)
       }
     }
+  };
+
+  // From https://daniel-lundin.github.io/react-dom-confetti/
+  const confettiConfig = {
+    angle: 90,
+    spread: "100",
+    startVelocity: "34",
+    elementCount: "81",
+    dragFriction: "0.11",
+    duration: "3000",
+    stagger: "3",
+    width: "10px",
+    height: "10px",
+    perspective: "1000px",
+    colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
   };
 
   return (
@@ -110,24 +127,20 @@ export default function ShowQuiz({ quiz }: PropTypes) {
           </div>
 
           <div className="pt-8 ">
-            <div className="grid items-start justify-left">
-              <div className="relative group">
-                <Reward
-                  ref={(ref) => {rewardRef.current = ref}}
-                  type="confetti"
-                >
+              <div className="grid items-start justify-left">
+                <div className="relative group">
                   <button
                     className="relative flex items-center py-4 leading-none bg-black divide-x divide-gray-600 rounded-lg px-7 border-gray-300 disabled:bg-gray-700 disabled:cursor-not-allowed"
-                    onClick={runCode} // runCode(inputCodeRef.current)}
+                    onClick={runCode}
                     disabled={isLoading}
                   >
+                    <Confetti active={ success } config={confettiConfig} />
                     <span className="text-gray-100 transition duration-200 group-hover:text-gray-100">
-                      {!isLoading ? 'Run Code →' : `Loading TypeScript...`}
+                      {!isLoading ? "Run Code →" : `Loading TypeScript...`}
                     </span>
                   </button>
-                </Reward>
+                </div>
               </div>
-            </div>
           </div>
 
           {errors.length > 0 ? (
