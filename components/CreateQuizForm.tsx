@@ -43,14 +43,14 @@ export default function CreateQuizForm({session}: PropTypes) {
     const insertedId = insertData[0].id
     const hashedId = hashids.encode(insertedId)
 
+    const url = `${process.env.NEXT_PUBLIC_HOME_URL}/q/${hashedId}`
+    setCreatedUrl(url)
+
     // Update the quiz to include the friendly ID
     await supabase
       .from('quizzes')
       .update({friendly_id: hashedId,})
       .eq('id', insertedId)
-
-    const url = `${process.env.NEXT_PUBLIC_HOME_URL}/q/${hashedId}`
-    setCreatedUrl(url)
   }
 
 
