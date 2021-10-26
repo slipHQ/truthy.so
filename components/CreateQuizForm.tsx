@@ -33,12 +33,23 @@ export default function CreateQuizForm({session}: PropTypes) {
       created_by: session.user.id
     }
 
-    const { data, error } = await supabase.from('quizzes').insert(quiz)
+    // Insert the quiz without a friendly ID
+    // Note that friendly ID isn't required, it's just helpful for debugging
+    const { data: insertData, error: insertError } = await supabase.from('quizzes').insert(quiz)
     setLoading(false)
-    if(error) throw error
+    if(insertError) throw insertError
 
-    const newId = hashids.encode(data[0].id)
-    const url = `${process.env.NEXT_PUBLIC_HOME_URL}/q/${newId}`
+    // Generate the friendly (hashed) ID for the created quiz
+    const insertedId = insertData[0].id
+    const hashedId = hashids.encode(insertedId)
+
+    // Update the quiz to include the friendly ID
+    await supabase
+      .from('quizzes')
+      .update({friendly_id: hashedId,})
+      .eq('id', insertedId)
+
+    const url = `${process.env.NEXT_PUBLIC_HOME_URL}/q/${hashedId}`
     setCreatedUrl(url)
   }
 
