@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import CreateQuizForm from "../../components/CreateQuizForm";
 import SignInButton from "../../components/SignInButton";
 import { supabase } from "../../utils/supabaseClient";
+import { useRouter } from 'next/router'
+
 
 export default function Create() {
   const [session, setSession] = useState<Session>(null);
@@ -18,6 +20,12 @@ export default function Create() {
   async function signout() {
     const { error } = await supabase.auth.signOut();
     if(error) throw error
+  }
+
+  const router = useRouter()
+  const query = router.query
+  if(query.error && query.error == "server_error" && query.error_description && query.error_description == "Error getting user email from external provider") {
+    alert("Sorry but we were unable to log you in. Please ensure that you have set an email address in Twitter and try again!")
   }
 
   if (session) {
