@@ -112,7 +112,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
         <div className="max-w-3xl mx-auto">
           <main className="mx-auto mb-12 max-w-7xl sm:mt-12">
             <div className="text-left">
-              <p className="max-w-md mt-4 text-base text-gray-500 dark:text-gray-450 md:mx-auto sm:text-lg md:mt-16 md:text-xl md:max-w-3xl">
+              <p className="max-w-md mt-4 text-base text-gray-500 dark:text-gray-450 md:mx-auto sm:text-lg md:mt-16 md:text-xl md:max-w-3xl whitespace-pre-wrap">
                 {quiz.description}
               </p>
             </div>
