@@ -2,6 +2,7 @@ import { Session } from "@supabase/supabase-js";
 import { FormEvent, useState } from "react";
 import { SaveQuiz } from "../types";
 import { supabase } from "../utils/supabaseClient";
+import Editor, { Monaco } from "@monaco-editor/react";
 
 import Hashids from "hashids";
 const hashids = new Hashids();
@@ -64,8 +65,11 @@ export default function CreateQuizForm({session}: PropTypes) {
                 htmlFor="description"
                 className="block text-sm font-medium text-gray-700"
               >
-                Description
+                Enter a description
               </label>
+              <p className="mt-2 text-sm text-gray-500">
+                Introduce your quiz and let users know what they should make the code do
+              </p>
               <div className="mt-1">
                 <textarea
                   id="description"
@@ -77,9 +81,6 @@ export default function CreateQuizForm({session}: PropTypes) {
                   required={true}
                 />
               </div>
-              <p className="mt-2 text-sm text-gray-500">
-                Introduce your quiz and let users know what they should make the code do
-              </p>
             </div>
 
             <div className="sm:col-span-6">
@@ -87,22 +88,22 @@ export default function CreateQuizForm({session}: PropTypes) {
                 htmlFor="startCode"
                 className="block text-sm font-medium text-gray-700"
               >
-                Start Code (will be run-wasm)
+                Start Code
               </label>
+              <p className="mt-2 text-sm text-gray-500">
+                Enter the starter code that the user should change
+              </p>
               <div className="mt-1">
-                <textarea
-                  id="startCode"
-                  name="startCode"
-                  rows={6}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
-                  value={startCode}
-                  onChange={(e) => setStartCode(e.target.value)}
-                  required={true}
+                <Editor
+                  height="20rem"
+                  defaultLanguage="typescript"
+                  defaultValue=""
+                  onChange={(code: string) => setStartCode(code)}
+                  className="block w-1/2 text-white bg-gray-900 border-gray-300 rounded-lg shadow-sm p-0.5 border dark:border-purple-300 focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                  theme="vs-dark"
+                  options={{ fontSize: 12, minimap: {enabled: false} }}
                 />
               </div>
-              <p className="mt-2 text-sm text-gray-500">
-                What should the user make the code output?
-              </p>
             </div>
 
             <div className="sm:col-span-4">
@@ -112,6 +113,9 @@ export default function CreateQuizForm({session}: PropTypes) {
               >
                 Target output
               </label>
+              <p className="mt-2 text-sm text-gray-500">
+                What should the user make the code output?
+              </p>
               <div className="mt-1">
                 <input
                   id="output"
