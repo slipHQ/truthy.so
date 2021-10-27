@@ -1,0 +1,17 @@
+body {
+    min-width: 100%;
+    min-height: 100vh;
+    background:
+        /* For small screens put each gradient at 500px width, this makes them merge nicely when narrow */
+        radial-gradient(ellipse 500px 80% at bottom 15% left -50px, #6A3428, transparent),
+        radial-gradient(ellipse 500px 80% at top 15% right -50px, #6A285C, black);
+}
+
+/* For larger screens put each gradient at 40% width, this keeps them prominent */
+@media (min-width: 1024px) {
+    body {
+        background:
+            radial-gradient(ellipse 40% 80% at bottom 15% left -50px, #6A3428, transparent),
+            radial-gradient(ellipse 40% 80% at top 15% right -50px, #6A285C, black);
+    }
+}
