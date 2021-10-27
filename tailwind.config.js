@@ -4,10 +4,17 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      blur: {
-        300: '300px',
+      keyframes: {
+        shake: {
+          '0%, 100%': { 'margin-left': '0rem' },
+          '25%': { 'margin-left': '0.5rem' },
+          '75%': { 'margin-left': '-0.5rem' },
+        }
+      },
+      animation: {
+        shake: 'shake 0.2s ease-in-out 0s 2',
       }
-    }
+    },
   },
   variants: {
     extend: {

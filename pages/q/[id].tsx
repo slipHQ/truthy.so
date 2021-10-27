@@ -51,15 +51,17 @@ type PropTypes = {
 export default function ShowQuiz({ quiz }: PropTypes) {
   const [tsClient, setTsClient] = useState<any>(null);
   const codeRef = useRef(quiz.start_code);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [output, setOutput] = useState<Array<string>>([]);
   const [errors, setErrors] = useState<Array<string>>([]);
+  const [hasCodeRun, setHasCodeRun] = useState(false);
   const [success, setSuccess] = useState(false);
 
   function initialiseTsClient() {
     const tsClient = createTSClient(window.ts);
     tsClient.fetchLibs(["es5", "dom"]).then(() => {
       setTsClient(tsClient);
+      setIsLoading(false);
     });
   }
 
@@ -77,6 +79,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
   }, []);
 
   const runCode = async () => {
+    setHasCodeRun(false)
     setIsLoading(true)
     setSuccess(false)
     const { output, errors }: { output: string[]; errors: string[] } =
@@ -90,6 +93,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
       }
     }
     setIsLoading(false)
+    setHasCodeRun(true)
   };
 
   // From https://daniel-lundin.github.io/react-dom-confetti/
@@ -120,7 +124,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
           </main>
 
           <div>
-            <div className="mt-1 ">
+            <div className= { hasCodeRun && output.length === 0 ? 'animate-shake' : null }>
               <div className="relative group">
                 <div className="absolute -inset-0.5 dark:bg-gradient-to-r from-indigo-300 to-purple-400 rounded-lg blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt" />
                 <RunCodeEditor codeRef={codeRef} runCode={runCode} />
@@ -138,7 +142,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
                   >
                     <Confetti active={ success } config={confettiConfig} />
                     <span className="text-gray-100 transition duration-200 group-hover:text-gray-100">
-                      {!isLoading ? "Run Code →" : "Running..."}
+                      {!isLoading ? "Run Code →" : "Loading..."}
                     </span>
                   </button>
                 </div>
