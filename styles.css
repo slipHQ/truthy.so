@@ -1,3 +1,5 @@
+
+/* Custom page background */
 body {
     min-width: 100%;
     min-height: 100vh;
@@ -14,4 +16,14 @@ body {
             radial-gradient(ellipse 40% 80% at bottom 15% left -50px, #6A3428, transparent),
             radial-gradient(ellipse 40% 80% at top 15% right -50px, #6A285C, black);
     }
+}
+
+/* Clean Monaco cursor: see https://stackoverflow.com/a/68930913/1375972 */
+.monaco-editor textarea:focus {
+    box-shadow: none !important;
+  }
+
+/* Custom button background */
+button.gradient-cta {
+    background: linear-gradient(263.56deg, #F0C06F -0.6%, #DA4142 49.43%, #8447A4 100%);
 }

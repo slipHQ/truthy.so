@@ -1,149 +1,166 @@
 import { Session } from "@supabase/supabase-js";
-import { FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { SaveQuiz } from "../types";
 import { supabase } from "../utils/supabaseClient";
-import Editor, { Monaco } from "@monaco-editor/react";
+import Editor from "@monaco-editor/react";
 
 import Hashids from "hashids";
 const hashids = new Hashids();
 
+type FormInputProps = {
+  name: string;
+  label: string;
+  sublabel: string;
+  children: React.ReactChild;
+};
 
-type PropTypes = {
-  session: Session
-}
+const FormInput = (props: FormInputProps) => (
+  <div className="sm:col-span-6 space-y-3">
+    <label htmlFor={props.name} className="text-base font-normal text-white">
+      {props.label}
+    </label>
+    <p className="text-sm text-white text-opacity-50">{props.sublabel}</p>
+    <div className="">{props.children}</div>
+  </div>
+);
 
-export default function CreateQuizForm({session}: PropTypes) {
-  const [description, setDescription] = useState("")
-  const [startCode, setStartCode] = useState("")
-  const [output, setOutput] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [createdUrl, setCreatedUrl] = useState(null)
+type CreateQuizFormProps = {
+  session: Session;
+};
+
+export default function CreateQuizForm({ session }: CreateQuizFormProps) {
+  const [description, setDescription] = useState("");
+  const [startCode, setStartCode] = useState("");
+  const [output, setOutput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [createdUrl, setCreatedUrl] = useState(null);
 
   const saveQuiz = async (e: FormEvent) => {
-    setLoading(true)
-    e.preventDefault()
+    setLoading(true);
+    e.preventDefault();
 
-    const now = new Date()
+    const now = new Date();
     const quiz: SaveQuiz = {
       description,
       start_code: startCode,
       target_output: output,
-      language: 'typescript',
+      language: "typescript",
       created_at: now,
       updated_at: now,
-      created_by: session.user.id
-    }
+      created_by: session.user.id,
+    };
 
     // Insert the quiz without a friendly ID
     // Note that friendly ID isn't required, it's just helpful for debugging
-    const { data: insertData, error: insertError } = await supabase.from('quizzes').insert(quiz)
-    setLoading(false)
-    if(insertError) throw insertError
+    const { data: insertData, error: insertError } = await supabase
+      .from("quizzes")
+      .insert(quiz);
+    setLoading(false);
+    if (insertError) throw insertError;
 
     // Generate the friendly (hashed) ID for the created quiz
-    const insertedId = insertData[0].id
-    const hashedId = hashids.encode(insertedId)
+    const insertedId = insertData[0].id;
+    const hashedId = hashids.encode(insertedId);
 
-    const url = `${process.env.NEXT_PUBLIC_HOME_URL}/q/${hashedId}`
-    setCreatedUrl(url)
+    const url = `${process.env.NEXT_PUBLIC_HOME_URL}/q/${hashedId}`;
+    setCreatedUrl(url);
 
     // Update the quiz to include the friendly ID
     await supabase
-      .from('quizzes')
-      .update({friendly_id: hashedId,})
-      .eq('id', insertedId)
-  }
-
+      .from("quizzes")
+      .update({ friendly_id: hashedId })
+      .eq("id", insertedId);
+  };
 
   return (
-    <form className="space-y-8 divide-y divide-gray-200" onSubmit={saveQuiz}>
-      <div className="space-y-8 divide-y divide-gray-200">
+    <form onSubmit={saveQuiz}>
+      <div>
         <div>
-          <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-            <div className="sm:col-span-6">
-              <label
-                htmlFor="description"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Enter a description
-              </label>
-              <p className="mt-2 text-sm text-gray-500">
-                Introduce your quiz and let users know what they should make the code do
-              </p>
-              <div className="mt-1">
-                <textarea
-                  id="description"
-                  name="description"
-                  rows={3}
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required={true}
-                />
-              </div>
-            </div>
+          <div className="mt-6 grid grid-cols-1 gap-y-12 sm:grid-cols-6">
+            <FormInput
+              key="description"
+              name="description"
+              label="Enter a description"
+              sublabel="Introduce your quiz and let users know what they should make the code do."
+            >
+              <textarea
+                id="description"
+                name="description"
+                rows={5}
+                className="bg-gray-600 bg-opacity-25 text-white focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 block w-full sm:text-sm border-0 rounded-xl resize-none"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required={true}
+              />
+            </FormInput>
 
-            <div className="sm:col-span-6">
-              <label
-                htmlFor="startCode"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Start Code
-              </label>
-              <p className="mt-2 text-sm text-gray-500">
-                Enter the starter code that the user should change
-              </p>
-              <div className="mt-1">
+            <FormInput
+              key="startCode"
+              name="startCode"
+              label="Start code"
+              sublabel="Enter the starter code that the user should update."
+            >
+              <div className="relative group">
+                <div className="absolute bg-4 w-full h-full group-hover:ring-4 group-hover:ring-indigo-500  group-hover:ring-opacity-50 rounded-xl" />
                 <Editor
-                  height="20rem"
+                  height="15rem"
                   defaultLanguage="typescript"
                   defaultValue=""
                   onChange={(code: string) => setStartCode(code)}
-                  className="block w-1/2 text-white bg-gray-900 border-gray-300 rounded-lg shadow-sm p-0.5 border dark:border-purple-300 focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                  className="block bg-[#1E1E1E] rounded-xl p-2 sm:text-sm"
                   theme="vs-dark"
-                  options={{ fontSize: 12, minimap: {enabled: false} }}
+                  options={{
+                    fontSize: 12,
+                    minimap: { enabled: false },
+                    overviewRulerLanes: 0,
+                    renderLineHighlight: "none",
+                    lineNumbers: "off",
+                  }}
                 />
               </div>
-            </div>
+            </FormInput>
 
-            <div className="sm:col-span-4">
-              <label
-                htmlFor="output"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Target output
-              </label>
-              <p className="mt-2 text-sm text-gray-500">
-                What should the user make the code output?
-              </p>
-              <div className="mt-1">
-                <input
-                  id="output"
-                  name="output"
-                  type="text"
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                  value={output}
-                  onChange={(e) => setOutput(e.target.value)}
-                  required={true}
-                />
-              </div>
-            </div>
+            <FormInput
+              key="output"
+              name="output"
+              label="Target output"
+              sublabel="What should the user make the code output?"
+            >
+              <input
+                id="output"
+                name="output"
+                type="text"
+                className="bg-gray-600 bg-opacity-25 text-white focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 block w-full sm:text-sm border-0 rounded-xl py-4"
+                value={output}
+                onChange={(e) => setOutput(e.target.value)}
+                required={true}
+              />
+            </FormInput>
           </div>
         </div>
       </div>
 
-      <div className="pt-5">
+      <div className="pt-5 mt-6">
         <div className="flex justify-between">
-          {createdUrl? (
-            <span className="text-green-600">Quiz created successfully!{" "}
-              <a className="font-medium underline text-green-800 hover:text-green-700" href={createdUrl}>{createdUrl}</a>
-            </span>) : <span />}
+          {createdUrl ? (
+            <span className="text-pink-800">
+              Quiz created successfully!{" "}
+              <a
+                className="font-medium underline text-pink-600 hover:text-pink-700"
+                href={createdUrl}
+              >
+                {createdUrl}
+              </a>
+            </span>
+          ) : (
+            <span />
+          )}
           <button
             type="submit"
-            className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            className="gradient-cta rounded-xl px-20 py-4 font-medium text-white focus:ring-2 focus:ring-white hover:scale-105 transition disabled:opacity-50"
             disabled={loading}
           >
-            {loading? 'Saving...' : 'Save'}
+            {loading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
