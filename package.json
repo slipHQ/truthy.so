@@ -16,7 +16,7 @@
     "@supabase/supabase-js": "^1.24.0",
     "@tailwindcss/forms": "^0.3.4",
     "hashids": "^2.2.8",
-    "next": "latest",
+    "next": "^12.0.1",
     "npm": "^8.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
