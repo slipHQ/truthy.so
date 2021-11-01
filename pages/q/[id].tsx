@@ -117,7 +117,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
         <div className="max-w-3xl mx-auto">
           <main className="mx-auto mb-12 max-w-7xl sm:mt-12">
             <div className="text-left">
-              <p className="max-w-md mt-4 text-base text-gray-500 dark:text-gray-450 md:mx-auto sm:text-lg md:mt-16 md:text-xl md:max-w-3xl whitespace-pre-wrap">
+              <p className="max-w-md mt-4 text-base text-white md:mx-auto sm:text-lg md:mt-16 md:text-xl md:max-w-3xl whitespace-pre-wrap">
                 {quiz.description}
               </p>
             </div>
@@ -136,7 +136,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
               <div className="grid items-start justify-left">
                 <div className="relative group">
                   <button
-                    className="relative flex items-center py-4 leading-none bg-black divide-x divide-gray-600 rounded-lg px-7 border-gray-300 disabled:bg-gray-700 disabled:cursor-not-allowed"
+                    className="gradient-cta rounded-xl relative flex items-center py-4 px-8 font-medium text-white hover:scale-105 disabled:hover:scale-100 transition disabled:opacity-50"
                     onClick={runCode}
                     disabled={isLoading}
                   >
@@ -151,19 +151,21 @@ export default function ShowQuiz({ quiz }: PropTypes) {
 
           {errors.length > 0 ? (
             <div>
-              <label className="block pt-8 text-sm font-medium text-gray-700 dark:text-gray-450">
+              <label className="block pt-8 pb-2 text-sm font-medium text-white">
                 Errors
               </label>
+              <div className="bg-gray-300 bg-opacity-20 max-w-max lg:bg-transparent p-4 rounded-md">
               {errors.map((error, index) => (
-                <div key={index} className="mt-1">
-                  <p className="text-sm text-red-500">{error}</p>
+                <div key={index}>
+                  <p className="text-sm text-red-400">{error}</p>
                 </div>
               ))}
+              </div>
             </div>
           ) : null}
 
           <div>
-            <label className="block pt-8 text-sm font-medium text-gray-700 dark:text-gray-450">
+            <label className="block pt-8 pb-2 text-sm font-medium text-white">
               Output
             </label>
 
@@ -173,7 +175,14 @@ export default function ShowQuiz({ quiz }: PropTypes) {
               value={output.join('\n')}
               className="block w-1/2 text-white bg-gray-900 border-gray-300 rounded-lg shadow-sm p-0.5 border dark:border-purple-300 focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
               theme="vs-dark"
-              options={{ fontSize: 12, minimap: {enabled: false}, readOnly: true, lineNumbers: "off" }}
+              options={{
+                fontSize: 12,
+                minimap: {enabled: false},
+                readOnly: true,
+                lineNumbers: "off",
+                overviewRulerLanes: 0,
+                renderLineHighlight: "none",
+              }}
             />
           </div>
         </div>

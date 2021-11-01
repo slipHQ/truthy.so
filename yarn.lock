@@ -411,15 +411,15 @@
     node-gyp "^8.2.0"
     read-package-json-fast "^2.0.1"
 
-"@run-wasm/run-wasm@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@run-wasm/run-wasm/-/run-wasm-0.0.2.tgz#72fdcb9d38cab01304b52979ef486239b442dd55"
-  integrity sha512-tpcg1qmZcc1I5qjuCGUDn9vvO3BzMvKWXH0s9j7uCijKNsQymom6w99THzSXjO4wAMqdiWop2OvxEMfvSY2SPQ==
+"@run-wasm/run-wasm@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@run-wasm/run-wasm/-/run-wasm-0.0.3.tgz#dd4b32583baac2f4818db7495d99b19a80a4fbb2"
+  integrity sha512-TmhR7AroRNM24nJpVV5TuLpHqCIepaMoiLmBMsq3UqaFx6gz/KwRClX7XBBfWrCltS5XVzdtPdrO3CH8C82ILg==
 
-"@run-wasm/ts@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@run-wasm/ts/-/ts-0.0.2.tgz#353de55edacd6750a9810b253ffa35c9058c2d2a"
-  integrity sha512-7HM4d/N+bJS37SDz4qMtGbGPlU4KGDJF+2l39U3PQejRS+wA2LOqst3HZkb+48QC0f7mBCpIt/xZVfq8AeJ4ow==
+"@run-wasm/ts@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@run-wasm/ts/-/ts-0.0.3.tgz#a4a28110b4d89ffecb6ee96cf3f54c795f99bcce"
+  integrity sha512-Bjd6lAMyrXvFLlGJ2w/a9fmzYnK/7+RjFX5Ye0mf2KF7KyaqVvhOigZp8JjXlq2Hrw2myqz4wi7U2E4ptmVaIg==
 
 "@supabase/gotrue-js@^1.18.0":
   version "1.18.0"
