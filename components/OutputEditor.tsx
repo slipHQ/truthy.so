@@ -7,17 +7,18 @@ type PropTypes = {
 };
 
 export default function OutputEditor(props: PropTypes) {
-  const { output, height } = props
+  const { output, height } = props;
 
   return (
     <Editor
       height={height}
-      defaultLanguage="typescript"
+      defaultLanguage='typescript'
       value={output.join("\n")}
-      className="block w-1/2 text-white bg-gray-900 border-gray-300 rounded-lg shadow-sm p-0.5 border focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
-      theme="vs-dark"
+      className='block w-1/2 text-white rounded-lg shadow-sm p-0.5 opacity-75 sm:text-sm'
+      theme='vs-dark'
       options={{
         fontSize: 12,
+        padding: { top: 15, bottom: 4, left: 4, right: 4 },
         minimap: { enabled: false },
         readOnly: true,
         lineNumbers: "off",
