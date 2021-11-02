@@ -5,6 +5,7 @@ import RunCodeEditor from "../components/RunCodeEditor";
 import useRunCode from "../hooks/useRunCode";
 import useTypescript from "../hooks/useTypescript";
 import { confettiConfig } from "../utils/confettiConfig";
+import Image from 'next/image'
 
 export default function IndexPage() {
   const startCode = `const f = "fizz"
