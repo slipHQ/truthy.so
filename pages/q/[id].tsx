@@ -47,7 +47,7 @@ export default function ShowQuiz({ quiz }: PropTypes) {
 
   return (
     <>
-      <div className="max-w-4xl px-4 py-8 mx-auto sm:px-6 lg:px-8">
+      <div className="max-w-4xl px-4 py-20 mx-auto sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <p className="mx-auto mb-12 sm:mt-12 text-left max-w-md mt-4 text-base text-white md:mx-auto sm:text-lg md:mt-16 md:text-xl md:max-w-3xl whitespace-pre-wrap">
             {quiz.description}

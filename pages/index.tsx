@@ -5,6 +5,7 @@ import RunCodeEditor from "../components/RunCodeEditor";
 import useRunCode from "../hooks/useRunCode";
 import useTypescript from "../hooks/useTypescript";
 import { confettiConfig } from "../utils/confettiConfig";
+import Image from 'next/image'
 
 export default function IndexPage() {
   const startCode = `const f = "fizz"
@@ -16,7 +17,7 @@ console.log(f)`;
 
   const { tsClient, tsLoading } = useTypescript();
   const codeRef = useRef(startCode);
-  const { runCode, codeRunning, output, errors, hasCodeRun, success } =
+  const { runCode, codeRunning, output, hasCodeRun, success } =
     useRunCode(tsClient, codeRef, targetOutput);
 
   return (

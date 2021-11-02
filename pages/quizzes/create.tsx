@@ -5,6 +5,7 @@ import SignInButton from "../../components/SignInButton";
 import PageTitle from "../../components/PageTitle";
 import { supabase } from "../../utils/supabaseClient";
 import { useRouter } from 'next/router'
+import Image from "next/image";
 
 export default function Create() {
   const [session, setSession] = useState<Session>(null);
@@ -32,8 +33,8 @@ export default function Create() {
     console.log(session.user);
     return (
       <>
-        <button onMouseDown={signout}>Log out</button>
-        <div className="max-w-4xl px-4 py-8 mx-auto sm:px-6 lg:px-8">
+        {/* <button onMouseDown={signout}>Log out</button> */}
+        <div className="max-w-4xl px-4 py-40 mx-auto sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
             <PageTitle>Create Quiz</PageTitle>
             <CreateQuizForm session={session} />
