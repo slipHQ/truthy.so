@@ -24,6 +24,6 @@ body {
   }
 
 /* Custom button background */
-button.gradient-cta {
+.gradient-cta {
     background: linear-gradient(263.56deg, #F0C06F -0.6%, #DA4142 49.43%, #8447A4 100%);
 }

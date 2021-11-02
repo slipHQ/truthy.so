@@ -114,7 +114,6 @@ export default function CreateQuizForm({ session }: CreateQuizFormProps) {
                     minimap: { enabled: false },
                     overviewRulerLanes: 0,
                     renderLineHighlight: "none",
-                    lineNumbers: "off",
                   }}
                 />
               </div>
