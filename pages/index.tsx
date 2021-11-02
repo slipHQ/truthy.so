@@ -16,7 +16,7 @@ console.log(f)`;
 
   const { tsClient, tsLoading } = useTypescript();
   const codeRef = useRef(startCode);
-  const { runCode, codeRunning, output, errors, hasCodeRun, success } =
+  const { runCode, codeRunning, output, hasCodeRun, success } =
     useRunCode(tsClient, codeRef, targetOutput);
 
   return (

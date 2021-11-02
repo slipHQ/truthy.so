@@ -30,7 +30,7 @@ export default function RunCodeEditor(props: PropTypes) {
       callback: () => runCode(),
       editor: editorRef.current,
     };
-    return addKeyBinding(runCodeBinding);
+    addKeyBinding(runCodeBinding);
   }, [monaco]);
 
   return (
