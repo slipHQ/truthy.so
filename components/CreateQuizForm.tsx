@@ -140,12 +140,12 @@ export default function CreateQuizForm({ session }: CreateQuizFormProps) {
       </div>
 
       <div className="pt-5 mt-6">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           {createdUrl ? (
-            <span className="text-pink-800">
+            <span className="text-white text-lg">
               Quiz created successfully!{" "}
               <a
-                className="font-medium underline text-pink-600 hover:text-pink-700"
+                className="font-medium underline"
                 href={createdUrl}
               >
                 {createdUrl}

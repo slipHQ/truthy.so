@@ -39,7 +39,6 @@ export default function Create({ serverSideSession }) {
   if (session) {
     return (
       <>
-        {/* <button onMouseDown={signout}>Log out</button> */}
         <div className='max-w-4xl px-4 pb-40 mx-auto sm:px-6 lg:px-8'>
           <div className='max-w-3xl mx-auto'>
             <button
