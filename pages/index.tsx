@@ -5,7 +5,7 @@ import RunCodeEditor from "../components/RunCodeEditor";
 import useRunCode from "../hooks/useRunCode";
 import useTypescript from "../hooks/useTypescript";
 import { confettiConfig } from "../utils/confettiConfig";
-import Image from 'next/image'
+import Image from "next/image";
 
 export default function IndexPage() {
   const startCode = `const f = "fizz"
@@ -17,12 +17,15 @@ console.log(f)`;
 
   const { tsClient, tsLoading } = useTypescript();
   const codeRef = useRef(startCode);
-  const { runCode, codeRunning, output, hasCodeRun, success } =
-    useRunCode(tsClient, codeRef, targetOutput);
+  const { runCode, codeRunning, output, hasCodeRun, success } = useRunCode(
+    tsClient,
+    codeRef,
+    targetOutput
+  );
 
   return (
     <div className='max-w-5xl mx-auto'>
-      <div className='grid grid-cols-1 gap-16 mt-40 ml-2 lg:grid-cols-6'>
+      <div className='grid grid-cols-1 gap-16 mt-12 ml-2 sm:mt-40 lg:grid-cols-6'>
         <div className='flex flex-col col-span-3 gap-16'>
           <h1 className='text-4xl font-medium text-white font-ibm'>
             Create and share programming quizzes

@@ -7,9 +7,9 @@ import "../styles.css";
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <div className="absolute top-8 md:top-[35px] left-8 md:left-[120px]">
-        <a href="/">
-        <Image src="/logo.png" width={70} height={48} />
+      <div className='m-4 top-8 md:top-[35px] left-8 md:left-[120px]'>
+        <a href='/'>
+          <img src='/logo.png' className='w-8 sm:w-12' />
         </a>
       </div>
       <Component {...pageProps} />
