@@ -18,7 +18,7 @@ const navigation = {
     },
     {
       name: "GitHub",
-      href: "https://github.com/slipHQ/run-wasm",
+      href: "https://github.com/slipHQ/truthy.so",
       icon: (props) => (
         <svg fill='currentColor' viewBox='0 0 24 24' {...props}>
           <path
