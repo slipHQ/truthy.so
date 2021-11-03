@@ -40,10 +40,10 @@ export default function Create({ serverSideSession }) {
     return (
       <>
         {/* <button onMouseDown={signout}>Log out</button> */}
-        <div className='max-w-4xl px-4 py-40 mx-auto sm:px-6 lg:px-8'>
+        <div className='max-w-4xl px-4 pb-40 mx-auto sm:px-6 lg:px-8'>
           <div className='max-w-3xl mx-auto'>
             <button
-              className='absolute top-8 md:top-[35px] right-8 md:right-[120px] bg-gray-900 text-white px-2 py-2 rounded-md text-sm'
+              className='absolute top-8 md:top-[35px] right-8 md:right-[120px] bg-gray-925 text-white px-3 py-2 rounded-md text-sm'
               onMouseDown={signout}
             >
               Log out
