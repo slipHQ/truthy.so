@@ -19,6 +19,13 @@ module.exports = {
       animation: {
         shake: "shake 0.2s ease-in-out 0s 2",
       },
+      colors: {
+        "gray-925": "#171717",
+        "gray-875": "#1A1A1A",
+        "gray-825": "#252525",
+        "gray-750": "#323232",
+        "gray-450": "#8C8C8C",
+      },
     },
   },
   variants: {

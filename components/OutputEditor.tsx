@@ -14,7 +14,7 @@ export default function OutputEditor(props: PropTypes) {
       height={height}
       defaultLanguage='typescript'
       value={output.join("\n")}
-      className='block w-1/2 text-white rounded-lg shadow-sm p-0.5 opacity-75 sm:text-sm'
+      className='block w-1/2 text-white rounded-lg shadow-sm opacity-75 sm:text-sm'
       theme='vs-dark'
       options={{
         fontSize: 12,
