@@ -13,7 +13,6 @@ export const addKeyBinding = ({
   callback,
   editor,
 }: CustomKeyBinding) => {
-  console.log(label, keybinding);
   return editor?.addAction({
     id: label,
     label,

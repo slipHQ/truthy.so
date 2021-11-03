@@ -31,7 +31,7 @@ export default function RunCodeEditor(props: PropTypes) {
       editor: editorRef.current,
     };
     addKeyBinding(runCodeBinding);
-  }, [monaco]);
+  }, [monaco, runCode]);
 
   return (
     <div className={hasCodeRun && output.length === 0 ? "animate-shake" : null}>
