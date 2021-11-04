@@ -5,6 +5,7 @@ import PageTitle from "../../components/PageTitle";
 import { supabase } from "../../utils/supabaseClient";
 import { useRouter } from "next/router";
 import { Profile, Quiz } from "../../types";
+import ViewCounter from "../../components/ViewCounter";
 
 export default function Account({ serverSideSession }) {
   const [session, setSession] = useState<Session>(serverSideSession);
@@ -136,6 +137,9 @@ export default function Account({ serverSideSession }) {
                           </p>
                           <span className='mt-4 inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-opacity-10 bg-white text-gray-300'>
                             {quiz.language}
+                          </span>
+                          <span className='mx-4 mt-4 inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-opacity-50 bg-purple-300 text-gray-300'>
+                            {quiz.views} views
                           </span>
                         </div>
                       </li>
