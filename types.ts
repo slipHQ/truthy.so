@@ -1,5 +1,5 @@
 export type Quiz = {
-  friendly_id: string;
+  friendly_id?: string;
   description: string;
   start_code: string;
   target_output: string;
