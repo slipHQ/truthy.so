@@ -69,7 +69,7 @@ export default function Create({ serverSideSession }) {
             <div className='max-w-4xl px-4 pt-8 pb-40 mx-auto sm:px-6 lg:px-8'>
               <div className='max-w-3xl mx-auto'>
                 <PageTitle>Create Quiz</PageTitle>
-                <CreateQuizForm session={session} />
+                <CreateQuizForm session={session} profile={profile} />
               </div>
             </div>
           </div>

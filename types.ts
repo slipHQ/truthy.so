@@ -4,6 +4,7 @@ export type Quiz = {
   description: string;
   start_code: string;
   target_output: string;
+  solution: string;
   language: string;
   views?: string;
 };
