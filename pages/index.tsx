@@ -7,8 +7,33 @@ import useTypescript from "../hooks/useTypescript";
 import { confettiConfig } from "../utils/confettiConfig";
 import Image from "next/image";
 import Footer from "../components/Footer";
+import { supabase } from "../utils/supabaseClient";
+import { Quiz } from "../types";
+import QuizTable from "../components/QuizTable";
+import PageTitle from "../components/PageTitle";
 
-export default function IndexPage() {
+export async function getServerSideProps({ params }) {
+  const { data, error } = await supabase
+    .from("quizzes")
+    .select(
+      "description, start_code, target_output, language, created_by, friendly_id, views"
+    )
+    .order("views", { ascending: false });
+
+  if (error) throw error;
+
+  return {
+    props: {
+      quizzes: data,
+    },
+  };
+}
+
+interface Props {
+  quizzes: Quiz[];
+}
+
+export default function IndexPage({ quizzes }: Props) {
   const startCode = `const f = "fizz"
 const b = "buzz"
 
@@ -84,8 +109,15 @@ console.log(f)`;
           </div>
         </div>
       </main>
-      <div className='mt-48'>
-        <Footer />
+
+      <div className='max-w-4xl mx-4 mt-8 sm:mt-32 sm:mx-auto'>
+        <h2 className='mb-10 text-3xl font-bold text-center text-white'>
+          Popular Quizzes
+        </h2>
+        <QuizTable quizzes={quizzes} />
+        <div className='mt-48'>
+          <Footer />
+        </div>
       </div>
     </>
   );
