@@ -2,6 +2,22 @@ create extension if not exists "moddatetime" with schema "extensions" version '1
 
 create type "public"."language" as enum ('typescript');
 
+alter table "public"."quizzes" add column "views" bigint default '0'::bigint;
+
+
+CREATE OR REPLACE FUNCTION public.increment(x integer, row_id integer)
+ RETURNS integer
+ LANGUAGE sql
+ SECURITY DEFINER
+AS $function$
+  update quizzes 
+  set views = views + x
+  where id = row_id;
+
+  select views from quizzes where id = row_id ;
+$function$
+;
+
 create table "public"."profiles" (
     "id" uuid not null,
     "created_at" timestamp with time zone not null,
