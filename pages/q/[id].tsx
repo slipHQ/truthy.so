@@ -68,7 +68,9 @@ export default function ShowQuiz({ quiz, profile }: PropTypes) {
               className='w-12 h-12 mr-4 rounded-full'
             />
             <div>
-              <p className='font-bold text-white text-md'>{profile.username}</p>
+              <p className='font-bold text-white text-md'>
+                {profile.full_name}
+              </p>
               <a
                 className='text-sm font-bold text-gray-500'
                 href={`https://www.twitter.com/${profile.username}`}
