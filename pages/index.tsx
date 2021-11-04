@@ -18,7 +18,8 @@ export async function getServerSideProps({ params }) {
     .select(
       "description, start_code, target_output, language, created_by, friendly_id, views"
     )
-    .order("views", { ascending: false });
+    .order("views", { ascending: false })
+    .limit(10);
 
   if (error) throw error;
 
