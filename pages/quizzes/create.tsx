@@ -6,9 +6,11 @@ import PageTitle from "../../components/PageTitle";
 import { supabase } from "../../utils/supabaseClient";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { Profile } from "../../types";
 
 export default function Create({ serverSideSession }) {
   const [session, setSession] = useState<Session>(serverSideSession);
+  const [profile, setProfile] = useState<Profile>();
 
   useEffect(() => {
     setSession(supabase.auth.session());
@@ -18,10 +20,23 @@ export default function Create({ serverSideSession }) {
     });
   }, []);
 
-  async function signout() {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-  }
+  useEffect(() => {
+    async function getProfile() {
+      if (session) {
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("username, avatar_url, full_name")
+          .eq("id", session.user.id);
+
+        if (profileError) throw profileError;
+        if (profile) {
+          setProfile(profile[0]);
+        }
+      }
+    }
+
+    getProfile();
+  }, [session]);
 
   const router = useRouter();
   const query = router.query;
@@ -36,18 +51,22 @@ export default function Create({ serverSideSession }) {
     );
   }
 
-  if (session) {
+  if (session && profile) {
     return (
       <>
         <div className='max-w-4xl px-4 pb-40 mx-auto sm:px-6 lg:px-8'>
           <div className='max-w-3xl mx-auto'>
-            <button
-              className='absolute top-8 md:top-[35px] right-8 md:right-[120px] bg-gray-925 text-white px-3 py-2 rounded-md text-sm'
-              onMouseDown={signout}
-            >
-              Log out
-            </button>
-            <div className='max-w-4xl px-4 py-40 mx-auto sm:px-6 lg:px-8'>
+            <div className='absolute flex flex-row items-center top-8 right-8'>
+              <a href='/account'>
+                <img
+                  src={profile.avatar_url}
+                  alt='avatar'
+                  className='h-8 mr-4 rounded-full'
+                  // className='absolute top-8 md:top-[35px] right-15 md:right-[120px] bg-gray-925 text-white px-3 py-2 rounded-md text-sm'
+                />
+              </a>
+            </div>
+            <div className='max-w-4xl px-4 pt-8 pb-40 mx-auto sm:px-6 lg:px-8'>
               <div className='max-w-3xl mx-auto'>
                 <PageTitle>Create Quiz</PageTitle>
                 <CreateQuizForm session={session} />
