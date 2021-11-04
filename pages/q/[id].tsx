@@ -10,6 +10,7 @@ import useRunCode from "../../hooks/useRunCode";
 import { confettiConfig } from "../../utils/confettiConfig";
 import OutputEditor from "../../components/OutputEditor";
 import Footer from "../../components/Footer";
+import ViewCounter from "../../components/ViewCounter";
 
 export async function getServerSideProps({ params }) {
   const id: string = params.id;
@@ -17,7 +18,7 @@ export async function getServerSideProps({ params }) {
 
   const { data, error } = await supabase
     .from("quizzes")
-    .select("description, start_code, target_output, language, created_by")
+    .select("description, start_code, target_output, language, created_by, id")
     .eq("id", supabaseId)
     .single();
 
@@ -61,23 +62,31 @@ export default function ShowQuiz({ quiz, profile }: PropTypes) {
     <>
       <div className='max-w-4xl pt-20 pb-48 mx-auto sm:px-6 lg:px-8'>
         <div className='max-w-3xl mx-auto'>
-          <div className='flex flex-row px-4'>
-            <img
-              src={profile.avatar_url}
-              alt='avatar'
-              className='w-12 h-12 mr-4 rounded-full'
-            />
-            <div>
-              <p className='font-bold text-white text-md'>
-                {profile.full_name}
-              </p>
-              <a
-                className='text-sm font-bold text-gray-500'
-                href={`https://www.twitter.com/${profile.username}`}
-                target='_blank'
-              >
-                @{profile.username}
-              </a>
+          <div className='flex justify-between px-4'>
+            <div className='flex flex-row'>
+              <img
+                src={profile.avatar_url}
+                alt='avatar'
+                className='w-12 h-12 mr-4 rounded-full'
+              />
+              <div>
+                <div>
+                  <p className='font-bold text-white text-md'>
+                    {profile.full_name}
+                  </p>
+                  <a
+                    className='text-sm font-bold text-gray-500'
+                    href={`https://www.twitter.com/${profile.username}`}
+                    target='_blank'
+                  >
+                    @{profile.username}
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className='flex flex-col justify-end mx-8 text-sm text-gray-500'>
+              <p className='text-gray-200'>{ViewCounter(parseInt(quiz.id))}</p>
+              {quiz.language}
             </div>
           </div>
           <p className='max-w-md px-4 mx-auto mt-4 mb-12 text-base text-left text-white whitespace-pre-wrap sm:mt-12 md:mx-auto sm:text-lg md:mt-16 md:text-xl md:max-w-3xl'>

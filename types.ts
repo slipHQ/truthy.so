@@ -1,9 +1,11 @@
 export type Quiz = {
+  id?: string;
   friendly_id?: string;
   description: string;
   start_code: string;
   target_output: string;
   language: string;
+  views?: string;
 };
 
 export type Profile = {
