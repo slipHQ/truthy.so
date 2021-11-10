@@ -20,3 +20,11 @@ export type SaveQuiz = Quiz & {
   updated_at: Date;
   created_by: string;
 };
+
+export type ExplanationStep = {
+  id: string;
+  message: string;
+  lines: number[];
+};
+
+export type Explanation = ExplanationStep[];

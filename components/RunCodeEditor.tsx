@@ -1,6 +1,8 @@
-import Editor, { Monaco } from "@monaco-editor/react";
+import { Monaco } from "@monaco-editor/react";
+import Editor from "./Editor";
 import React, { MutableRefObject } from "react";
 import { CustomKeyBinding, addKeyBinding } from "../utils/keyBindings";
+import LineHighlights from "./LineHighlights";
 
 type PropTypes = {
   codeRef: MutableRefObject<string>;
@@ -49,12 +51,14 @@ export default function RunCodeEditor(props: PropTypes) {
           fontSize: 14,
           minimap: { enabled: false },
           overviewRulerLanes: 0,
-          padding: { top: 15, bottom: 4, left: 4, right: 4 },
+          padding: { top: 15, bottom: 4 },
           renderLineHighlight: "none",
           readOnly: props.readOnly,
         }}
         onMount={handleEditorDidMount}
-      />
+      >
+        <LineHighlights lines={[6, 7, 8]} />
+      </Editor>
     </div>
   );
 }

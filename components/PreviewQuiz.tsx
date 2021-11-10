@@ -3,15 +3,43 @@ import Hashids from "hashids";
 import { Session } from "@supabase/supabase-js";
 import Confetti from "react-dom-confetti";
 import useRunCode from "../hooks/useRunCode";
-import { SaveQuiz } from "../types";
+import { ExplanationStep, SaveQuiz } from "../types";
 import useTypescript from "../hooks/useTypescript";
 import { Profile, Quiz } from "../types";
 import { confettiConfig } from "../utils/confettiConfig";
 import OutputEditor from "./OutputEditor";
 import RunCodeEditor from "./RunCodeEditor";
 import { supabase } from "../utils/supabaseClient";
+import { nanoid } from "nanoid";
 
 const hashids = new Hashids();
+
+const useExplanation = (defaultSteps: ExplanationStep[]) => {
+  const [selected, setSelected] = useState<string | null>(null);
+  const [steps, setSteps] = useState<ExplanationStep[]>(defaultSteps);
+
+  const addStep = () => {
+    setSteps((prev) => [...prev, { id: nanoid(), message: "", lines: [] }]);
+  };
+
+  const removeStep = (id) => {
+    setSteps((prev) => prev.filter((step) => step.id !== id));
+  };
+
+  const selectedStep = steps.find((step) => step.id === selectedStep);
+
+  const selectStep = (id) => {
+    setSelected(id);
+  };
+
+  return {
+    steps,
+    selectedStep,
+    selectStep,
+    addStep,
+    removeStep,
+  };
+};
 
 declare global {
   interface Window {
@@ -30,6 +58,8 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
   const codeRef = useRef(quiz.start_code);
   const [loading, setLoading] = useState(false);
   const [createdUrl, setCreatedUrl] = useState(null);
+  const explanation = useExplanation([]);
+
   const { runCode, codeRunning, output, errors, hasCodeRun, success } =
     useRunCode(tsClient, codeRef, quiz.target_output);
 
@@ -144,6 +174,62 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
             </label>
 
             <OutputEditor output={output} height="10rem" />
+          </div>
+          <div>
+            <div className="flex justify-between items-center h-8 mt-8 mb-2">
+              <label className="block pt-2 pb-2 text-sm font-medium text-white">
+                Explanation of Solution
+              </label>
+              <button
+                onClick={() => explanation.addStep()}
+                className="relative flex items-center px-4  text-sm font-medium text-white transition rounded-md font-ibm gradient-cta hover:scale-105 disabled:hover:scale-100 disabled:opacity-50 h-8"
+              >
+                Add Step
+              </button>
+            </div>
+            <div>
+              {explanation.steps.length === 0 && (
+                <p className="text-white text-sm opacity-60 my-4">
+                  No steps yet, but explanation is optional.
+                </p>
+              )}
+              {explanation.steps.map((step, i) => (
+                <div
+                  key={step.id}
+                  tabIndex={0}
+                  onClick={() => explanation.selectStep(step.id)}
+                >
+                  <label
+                    htmlFor={step.id}
+                    className="block pt-2 pb-2 text-sm font-medium text-white"
+                  >
+                    <p>Step {i + 1}</p>
+                  </label>
+                  <div className="flex">
+                    <input
+                      type="text"
+                      className="flex-1 block w-full py-4 text-white bg-gray-600 bg-opacity-25 border-0 focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 sm:text-sm rounded-xl"
+                      value={step.message}
+                      placeholder="Explanation"
+                    />
+                    <div className="w-4" />
+                    <input
+                      type="text"
+                      className="w-40 block w-full py-4 text-white bg-gray-600 bg-opacity-25 border-0 focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 sm:text-sm rounded-xl"
+                      value={step.lines.toString()}
+                      placeholder="Line Numbers"
+                    />
+                    <div className="w-4" />
+                    <button
+                      className="relative flex items-center px-4  text-sm font-medium text-white rounded-xl font-ibm h-100 bg-gray-600 bg-opacity-25 hover:bg-opacity-40"
+                      onClick={() => explanation.removeStep(step.id)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
