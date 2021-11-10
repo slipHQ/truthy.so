@@ -123,17 +123,19 @@ export default function ShowQuiz({ quiz, profile }: PropTypes) {
                 <RefreshIcon className="w-4 h-4" />
               </button>
             )}
-            <button
-              type="button"
-              className="px-2 py-2 text-xs font-medium text-center text-white transition bg-black bg-opacity-25 border-r border-gray-800 border-tr ml-2w-48 rounded-tr-md margin-auto hover:bg-gray-900"
-              onClick={() => setShowSolution((prev) => !prev)}
-            >
-              {showSolution ? (
-                <span>Hide Solution</span>
-              ) : (
-                <span>Show Solution</span>
-              )}
-            </button>
+            {quiz.solution && (
+              <button
+                type="button"
+                className="px-2 py-2 text-xs font-medium text-center text-white transition bg-black bg-opacity-25 border-r border-gray-800 border-tr ml-2w-48 rounded-tr-md margin-auto hover:bg-gray-900"
+                onClick={() => setShowSolution((prev) => !prev)}
+              >
+                {showSolution ? (
+                  <span>Hide Solution</span>
+                ) : (
+                  <span>Show Solution</span>
+                )}
+              </button>
+            )}
           </div>
 
           {showSolution && (
