@@ -2,22 +2,6 @@ create extension if not exists "moddatetime" with schema "extensions" version '1
 
 create type "public"."language" as enum ('typescript');
 
-alter table "public"."quizzes" add column "views" bigint default '0'::bigint;
-
-
-CREATE OR REPLACE FUNCTION public.increment(x integer, row_id integer)
- RETURNS integer
- LANGUAGE sql
- SECURITY DEFINER
-AS $function$
-  update quizzes 
-  set views = views + x
-  where id = row_id;
-
-  select views from quizzes where id = row_id ;
-$function$
-;
-
 create table "public"."profiles" (
     "id" uuid not null,
     "created_at" timestamp with time zone not null,
@@ -42,6 +26,19 @@ create table "public"."quizzes" (
     "friendly_id" character varying
 );
 
+alter table "public"."quizzes" add column "views" bigint default '0'::bigint;
+CREATE OR REPLACE FUNCTION public.increment(x integer, row_id integer)
+ RETURNS integer
+ LANGUAGE sql
+ SECURITY DEFINER
+AS $function$
+  update quizzes 
+  set views = views + x
+  where id = row_id;
+
+  select views from quizzes where id = row_id ;
+$function$
+;
 
 alter table "public"."quizzes" enable row level security;
 
@@ -285,3 +282,4 @@ CREATE TRIGGER create_profile_on_signup AFTER INSERT ON auth.users FOR EACH ROW 
 CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.quizzes FOR EACH ROW EXECUTE FUNCTION moddatetime('updated_at');
 
 
+alter table "public"."quizzes" add column "solution" character varying;

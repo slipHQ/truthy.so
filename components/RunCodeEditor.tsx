@@ -8,6 +8,7 @@ type PropTypes = {
   hasCodeRun: Boolean;
   output: Array<string>;
   height: string;
+  readOnly?: boolean;
 };
 
 export default function RunCodeEditor(props: PropTypes) {
@@ -37,19 +38,20 @@ export default function RunCodeEditor(props: PropTypes) {
     <div className={hasCodeRun && output.length === 0 ? "animate-shake" : null}>
       <Editor
         height={height}
-        defaultLanguage='typescript'
+        defaultLanguage="typescript"
         value={codeRef.current}
         onChange={(code: string) => {
           codeRef.current = code;
         }}
-        className='block text-white rounded-lg dark:border-purple-300 focus:ring-gray-500 sm:text-sm'
-        theme='vs-dark'
+        className="block text-white rounded-lg dark:border-purple-300 focus:ring-gray-500 sm:text-sm"
+        theme="vs-dark"
         options={{
           fontSize: 14,
           minimap: { enabled: false },
           overviewRulerLanes: 0,
           padding: { top: 15, bottom: 4, left: 4, right: 4 },
           renderLineHighlight: "none",
+          readOnly: props.readOnly,
         }}
         onMount={handleEditorDidMount}
       />

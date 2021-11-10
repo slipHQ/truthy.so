@@ -38,6 +38,6 @@ export default function useRunCode(
     output,
     errors,
     hasCodeRun,
-    success
-  }
+    success,
+  };
 }
