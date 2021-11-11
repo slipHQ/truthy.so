@@ -11,6 +11,7 @@ import OutputEditor from "./OutputEditor";
 import RunCodeEditor from "./RunCodeEditor";
 import { supabase } from "../utils/supabaseClient";
 import { nanoid } from "nanoid";
+import { NumberArrayInput } from "./ComplexInput";
 
 const hashids = new Hashids();
 
@@ -26,10 +27,25 @@ const useExplanation = (defaultSteps: ExplanationStep[]) => {
     setSteps((prev) => prev.filter((step) => step.id !== id));
   };
 
-  const selectedStep = steps.find((step) => step.id === selectedStep);
+  const selectedStep = steps.find((step) => step.id === selected);
 
-  const selectStep = (id) => {
+  const selectStep = (id: string) => {
     setSelected(id);
+  };
+
+  const udpateStep = (id, patch: Partial<ExplanationStep>) => {
+    setSteps((prev) =>
+      prev.map((step) => {
+        if (step.id !== id) {
+          return step;
+        } else {
+          return {
+            ...step,
+            ...patch,
+          };
+        }
+      })
+    );
   };
 
   return {
@@ -38,6 +54,7 @@ const useExplanation = (defaultSteps: ExplanationStep[]) => {
     selectStep,
     addStep,
     removeStep,
+    udpateStep,
   };
 };
 
@@ -138,6 +155,7 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
             hasCodeRun={hasCodeRun}
             output={output}
             height="20rem"
+            highlightLines={explanation.selectedStep?.lines}
           />
 
           <div className="px-4 pt-8 sm:px-0">
@@ -172,11 +190,10 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
             <label className="block pt-8 pb-2 text-sm font-medium text-white">
               Output
             </label>
-
             <OutputEditor output={output} height="10rem" />
           </div>
           <div>
-            <div className="flex justify-between items-center h-8 mt-8 mb-2">
+            <div className="flex justify-between items-center h-8 mt-8 mb-4">
               <label className="block pt-2 pb-2 text-sm font-medium text-white">
                 Explanation of Solution
               </label>
@@ -197,11 +214,16 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
                 <div
                   key={step.id}
                   tabIndex={0}
-                  onClick={() => explanation.selectStep(step.id)}
+                  onMouseDown={() => explanation.selectStep(step.id)}
+                  className={
+                    explanation.selectedStep?.id === step.id
+                      ? "bg-white bg-opacity-10 p-6 rounded-xl"
+                      : "p-6 rounded-xl"
+                  }
                 >
                   <label
                     htmlFor={step.id}
-                    className="block pt-2 pb-2 text-sm font-medium text-white"
+                    className="block pb-2 text-sm font-medium text-white"
                   >
                     <p>Step {i + 1}</p>
                   </label>
@@ -211,18 +233,33 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
                       className="flex-1 block w-full py-4 text-white bg-gray-600 bg-opacity-25 border-0 focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 sm:text-sm rounded-xl"
                       value={step.message}
                       placeholder="Explanation"
+                      onChange={(e) =>
+                        explanation.udpateStep(step.id, {
+                          message: e.target.value,
+                        })
+                      }
                     />
                     <div className="w-4" />
-                    <input
+                    <NumberArrayInput
                       type="text"
                       className="w-40 block w-full py-4 text-white bg-gray-600 bg-opacity-25 border-0 focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 sm:text-sm rounded-xl"
-                      value={step.lines.toString()}
+                      value={step.lines}
+                      onChange={(lines) => {
+                        explanation.udpateStep(step.id, {
+                          lines,
+                        });
+                      }}
                       placeholder="Line Numbers"
                     />
                     <div className="w-4" />
                     <button
                       className="relative flex items-center px-4  text-sm font-medium text-white rounded-xl font-ibm h-100 bg-gray-600 bg-opacity-25 hover:bg-opacity-40"
-                      onClick={() => explanation.removeStep(step.id)}
+                      onMouseDown={(e) => {
+                        e.stopPropagation();
+                      }}
+                      onClick={(e) => {
+                        explanation.removeStep(step.id);
+                      }}
                     >
                       Remove
                     </button>

@@ -11,10 +11,12 @@ type PropTypes = {
   output: Array<string>;
   height: string;
   readOnly?: boolean;
+  highlightLines?: number[];
 };
 
 export default function RunCodeEditor(props: PropTypes) {
-  const { codeRef, runCode, hasCodeRun, output, height } = props;
+  const { codeRef, runCode, hasCodeRun, output, height, highlightLines } =
+    props;
   const editorRef = React.useRef(null);
   const [monaco, setMonaco] = React.useState<Monaco>(null);
 
@@ -57,7 +59,7 @@ export default function RunCodeEditor(props: PropTypes) {
         }}
         onMount={handleEditorDidMount}
       >
-        <LineHighlights lines={[6, 7, 8]} />
+        <LineHighlights lines={highlightLines} />
       </Editor>
     </div>
   );

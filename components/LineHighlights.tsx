@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, FC } from "react";
+import { useEffect, useRef, FC } from "react";
 import { useMonaco } from "@monaco-editor/react";
 import { useEditor } from "./Editor";
 
@@ -9,10 +9,11 @@ interface LineHighlightsProps {
 const LineHighlights: FC<LineHighlightsProps> = ({ lines = [] }) => {
   const monaco = useMonaco();
   const editor = useEditor();
+  const prevDecorationsRef = useRef([]);
 
   useEffect(() => {
-    editor?.deltaDecorations(
-      [],
+    prevDecorationsRef.current = editor?.deltaDecorations(
+      prevDecorationsRef.current || [],
       lines.map((line) => ({
         range: new monaco.Range(line, 1, line, 1),
         options: {
