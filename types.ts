@@ -5,8 +5,13 @@ export type Quiz = {
   start_code: string;
   target_output: string;
   solution: string;
+  explanation?: Explanation;
   language: string;
   views?: string;
+};
+
+export type Explanation = {
+  steps: ExplanationStep[];
 };
 
 export type Profile = {
@@ -26,5 +31,3 @@ export type ExplanationStep = {
   message: string;
   lines: number[];
 };
-
-export type Explanation = ExplanationStep[];

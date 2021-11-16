@@ -12,51 +12,10 @@ import RunCodeEditor from "./RunCodeEditor";
 import { supabase } from "../utils/supabaseClient";
 import { nanoid } from "nanoid";
 import { NumberArrayInput } from "./ComplexInput";
+import Step from "./Step";
+import useExplanation from "../hooks/useExplanation";
 
 const hashids = new Hashids();
-
-const useExplanation = (defaultSteps: ExplanationStep[]) => {
-  const [selected, setSelected] = useState<string | null>(null);
-  const [steps, setSteps] = useState<ExplanationStep[]>(defaultSteps);
-
-  const addStep = () => {
-    setSteps((prev) => [...prev, { id: nanoid(), message: "", lines: [] }]);
-  };
-
-  const removeStep = (id) => {
-    setSteps((prev) => prev.filter((step) => step.id !== id));
-  };
-
-  const selectedStep = steps.find((step) => step.id === selected);
-
-  const selectStep = (id: string) => {
-    setSelected(id);
-  };
-
-  const udpateStep = (id, patch: Partial<ExplanationStep>) => {
-    setSteps((prev) =>
-      prev.map((step) => {
-        if (step.id !== id) {
-          return step;
-        } else {
-          return {
-            ...step,
-            ...patch,
-          };
-        }
-      })
-    );
-  };
-
-  return {
-    steps,
-    selectedStep,
-    selectStep,
-    addStep,
-    removeStep,
-    udpateStep,
-  };
-};
 
 declare global {
   interface Window {
@@ -87,6 +46,9 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
     const insertQuiz: SaveQuiz = {
       ...quiz,
       solution: codeRef.current,
+      explanation: {
+        steps: explanation.steps,
+      },
       created_at: now,
       updated_at: now,
       created_by: session.user.id,
@@ -156,7 +118,11 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
             output={output}
             height="20rem"
             highlightLines={explanation.selectedStep?.lines}
-          />
+          >
+            {/* {explanation.selectedStep && (
+              <Step step={explanation.selectedStep} />
+            )} */}
+          </RunCodeEditor>
 
           <div className="px-4 pt-8 sm:px-0">
             <button

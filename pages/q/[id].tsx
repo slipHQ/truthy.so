@@ -13,6 +13,9 @@ import OutputEditor from "../../components/OutputEditor";
 import Footer from "../../components/Footer";
 import ViewCounter from "../../components/ViewCounter";
 import useForceUpdate from "../../hooks/useForceUpdate";
+import ContentWidget from "../../components/ContentWidget";
+import Step from "../../components/Step";
+import useExplanation from "../../hooks/useExplanation";
 
 export async function getServerSideProps({ params }) {
   const id: string = params.id;
@@ -21,7 +24,7 @@ export async function getServerSideProps({ params }) {
   const { data, error } = await supabase
     .from("quizzes")
     .select(
-      "description, start_code, target_output, language, created_by, id, solution"
+      "description, start_code, target_output, language, created_by, id, solution, explanation"
     )
     .eq("id", supabaseId)
     .single();
@@ -67,6 +70,10 @@ export default function ShowQuiz({ quiz, profile }: PropTypes) {
     tsClient,
     solutionCodeRef,
     quiz.target_output
+  );
+  const explanation = useExplanation(
+    quiz.explanation?.steps || ([] as any),
+    quiz.explanation?.steps[0]?.id
   );
 
   const activeInterpreter = showSolution
@@ -146,7 +153,14 @@ export default function ShowQuiz({ quiz, profile }: PropTypes) {
               output={solutionInterpreter.output}
               height="20rem"
               readOnly
-            />
+            >
+              {explanation.selectedStep && (
+                <Step
+                  step={explanation.selectedStep}
+                  onNext={() => explanation.selectNext()}
+                />
+              )}
+            </RunCodeEditor>
           )}
           {!showSolution && (
             <RunCodeEditor

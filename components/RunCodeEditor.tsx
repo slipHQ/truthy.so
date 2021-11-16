@@ -1,10 +1,11 @@
 import { Monaco } from "@monaco-editor/react";
 import Editor from "./Editor";
-import React, { MutableRefObject } from "react";
+import React, { MutableRefObject, ReactNode } from "react";
 import { CustomKeyBinding, addKeyBinding } from "../utils/keyBindings";
 import LineHighlights from "./LineHighlights";
+import LineSelector from "./LineSelector";
 
-type PropTypes = {
+export type PropTypes = {
   codeRef: MutableRefObject<string>;
   runCode: () => void;
   hasCodeRun: Boolean;
@@ -12,11 +13,19 @@ type PropTypes = {
   height: string;
   readOnly?: boolean;
   highlightLines?: number[];
+  children?: ReactNode;
 };
 
 export default function RunCodeEditor(props: PropTypes) {
-  const { codeRef, runCode, hasCodeRun, output, height, highlightLines } =
-    props;
+  const {
+    codeRef,
+    runCode,
+    hasCodeRun,
+    output,
+    height,
+    highlightLines,
+    children,
+  } = props;
   const editorRef = React.useRef(null);
   const [monaco, setMonaco] = React.useState<Monaco>(null);
 
@@ -59,7 +68,8 @@ export default function RunCodeEditor(props: PropTypes) {
         }}
         onMount={handleEditorDidMount}
       >
-        <LineHighlights lines={highlightLines} />
+        <LineSelector lines={highlightLines} />
+        {children}
       </Editor>
     </div>
   );

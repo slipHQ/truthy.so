@@ -283,3 +283,5 @@ CREATE TRIGGER handle_updated_at BEFORE UPDATE ON public.quizzes FOR EACH ROW EX
 
 
 alter table "public"."quizzes" add column "solution" character varying;
+
+alter table "public"."quizzes" add column "explanation" jsonb;
