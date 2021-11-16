@@ -14,6 +14,7 @@ import { nanoid } from "nanoid";
 import { NumberArrayInput } from "./ComplexInput";
 import Step from "./Step";
 import useExplanation from "../hooks/useExplanation";
+import LineSelector from "./LineSelector";
 
 const hashids = new Hashids();
 
@@ -117,8 +118,18 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
             hasCodeRun={hasCodeRun}
             output={output}
             height="20rem"
-            highlightLines={explanation.selectedStep?.lines}
           >
+            {explanation.selectedStep && (
+              <LineSelector
+                lines={explanation.selectedStep?.lines}
+                onChange={(lines) => {
+                  explanation.udpateStep(explanation.selectedStep.id, {
+                    lines,
+                  });
+                }}
+              />
+            )}
+
             {/* {explanation.selectedStep && (
               <Step step={explanation.selectedStep} />
             )} */}

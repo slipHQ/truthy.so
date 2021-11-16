@@ -8,7 +8,11 @@ interface LineDecorationProps {
   glyphMarginClass?: string;
 }
 
-const LineDecoration: FC<LineDecorationProps> = ({ line, lineClass }) => {
+const LineDecoration: FC<LineDecorationProps> = ({
+  line,
+  lineClass,
+  glyphMarginClass,
+}) => {
   const monaco = useMonaco();
   const editor = useEditor();
   const prevDecorationsRef = useRef([]);
@@ -23,7 +27,7 @@ const LineDecoration: FC<LineDecorationProps> = ({ line, lineClass }) => {
             options: {
               isWholeLine: true,
               className: lineClass,
-              glyphMarginClassName: "editor-glyph",
+              glyphMarginClassName: glyphMarginClass,
             },
           },
         ]

@@ -14,35 +14,46 @@ interface LineSelectorProps {
   onChange?: (lines: number[]) => void;
 }
 
-const LineSelector: FC<LineSelectorProps> = ({ lines }) => {
-  //   const monaco = useMonaco();
+const LineSelector: FC<LineSelectorProps> = ({ lines = [], onChange }) => {
+  const monaco = useMonaco();
   const editor = useEditor();
   const numLines = useLineCount();
 
   const lineOptions = useMemo(() => range(numLines, 1), [numLines]);
+  const lineSet = useMemo(() => new Set(lines), [JSON.stringify(lines)]);
 
   useEffect(() => {
     if (editor) {
       const disposable = editor.onMouseDown((e) => {
-        console.log(e.target);
+        if (
+          e.target.type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+        ) {
+          if (lineSet.has(e.target.position.lineNumber)) {
+            onChange(lines.filter((l) => l !== e.target.position.lineNumber));
+          } else {
+            onChange([...lines, e.target.position.lineNumber]);
+          }
+        }
       });
       return () => {
         disposable.dispose();
       };
     }
-  }, [editor]);
+  }, [editor, lineSet]);
 
   return (
     <>
-      {lineOptions.map((line) => (
-        <LineDecoration
-          key={line}
-          line={line}
-          lineClass={
-            lines?.includes(line) ? "editor-highlight-line" : undefined
-          }
-        />
-      ))}
+      {lineOptions.map((line) => {
+        const isLineSelected = lineSet.has(line);
+        return (
+          <LineDecoration
+            key={line} // need a way to identify lines
+            line={line}
+            lineClass={isLineSelected ? "editor-highlight-line" : undefined}
+            glyphMarginClass={isLineSelected ? "remove-icon" : "add-icon"}
+          />
+        );
+      })}
     </>
   );
 };

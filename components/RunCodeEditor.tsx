@@ -12,20 +12,11 @@ export type PropTypes = {
   output: Array<string>;
   height: string;
   readOnly?: boolean;
-  highlightLines?: number[];
   children?: ReactNode;
 };
 
 export default function RunCodeEditor(props: PropTypes) {
-  const {
-    codeRef,
-    runCode,
-    hasCodeRun,
-    output,
-    height,
-    highlightLines,
-    children,
-  } = props;
+  const { codeRef, runCode, hasCodeRun, output, height, children } = props;
   const editorRef = React.useRef(null);
   const [monaco, setMonaco] = React.useState<Monaco>(null);
 
@@ -65,10 +56,10 @@ export default function RunCodeEditor(props: PropTypes) {
           padding: { top: 15, bottom: 4 },
           renderLineHighlight: "none",
           readOnly: props.readOnly,
+          glyphMargin: true,
         }}
         onMount={handleEditorDidMount}
       >
-        <LineSelector lines={highlightLines} />
         {children}
       </Editor>
     </div>
