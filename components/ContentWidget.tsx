@@ -35,7 +35,17 @@ const ContentWidget: FC<ContentWidgetProps> = ({
           return this.domNode;
         },
         afterRender: function () {
-          ReactDOM.render(children, this.domNode);
+          ReactDOM.render(
+            <div
+              onMouseOver={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              {children}
+            </div>,
+            this.domNode
+          );
         },
         getPosition: function () {
           return {

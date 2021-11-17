@@ -10,7 +10,9 @@ const useExplanation = (
   const [steps, setSteps] = useState<ExplanationStep[]>(defaultSteps);
 
   const addStep = () => {
-    setSteps((prev) => [...prev, { id: nanoid(), message: "", lines: [] }]);
+    const id = nanoid();
+    setSteps((prev) => [...prev, { id, message: "", lines: [] }]);
+    setSelected(id);
   };
 
   const removeStep = (id: string) => {
@@ -23,9 +25,17 @@ const useExplanation = (
     setSelected(id);
   };
 
+  const selectedStepIndex = steps.findIndex((s) => s.id === selected);
+
   const selectNext = () => {
     const index = steps.findIndex((s) => s.id === selected);
     const nextIndex = (index + 1) % steps.length;
+    setSelected(steps[nextIndex].id);
+  };
+
+  const selectPrev = () => {
+    const index = steps.findIndex((s) => s.id === selected);
+    const nextIndex = Math.max(index - 1, 0);
     setSelected(steps[nextIndex].id);
   };
 
@@ -47,7 +57,9 @@ const useExplanation = (
   return {
     steps,
     selectedStep,
+    selectedStepIndex,
     selectStep,
+    selectPrev,
     selectNext,
     addStep,
     removeStep,

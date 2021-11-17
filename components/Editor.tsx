@@ -13,7 +13,7 @@ const Editor: FC<EditorProps> = ({ onMount, children, ...otherProps }) => {
 
   function handleMount(editor: any, monaco: Monaco) {
     setEditor(editor);
-    onMount(editor, monaco);
+    onMount?.(editor, monaco);
   }
 
   return (

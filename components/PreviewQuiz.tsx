@@ -1,81 +1,33 @@
-import React, { FormEvent, useRef, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Hashids from "hashids";
 import { Session } from "@supabase/supabase-js";
 import Confetti from "react-dom-confetti";
 import useRunCode from "../hooks/useRunCode";
-import { ExplanationStep, SaveQuiz } from "../types";
 import useTypescript from "../hooks/useTypescript";
 import { Profile, Quiz } from "../types";
 import { confettiConfig } from "../utils/confettiConfig";
 import OutputEditor from "./OutputEditor";
 import RunCodeEditor from "./RunCodeEditor";
-import { supabase } from "../utils/supabaseClient";
-import { nanoid } from "nanoid";
-import { NumberArrayInput } from "./ComplexInput";
-import Step from "./Step";
-import useExplanation from "../hooks/useExplanation";
-import LineSelector from "./LineSelector";
-
-const hashids = new Hashids();
-
-declare global {
-  interface Window {
-    ts: any;
-  }
-}
 
 type PropTypes = {
   quiz: Quiz;
   profile: Profile;
   session: Session;
+  onSolution?: (solution: string) => void;
 };
 
-export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
+export default function ShowQuiz({ quiz, profile, onSolution }: PropTypes) {
   const { tsClient, tsLoading } = useTypescript();
   const codeRef = useRef(quiz.start_code);
-  const [loading, setLoading] = useState(false);
-  const [createdUrl, setCreatedUrl] = useState(null);
-  const explanation = useExplanation([]);
 
   const { runCode, codeRunning, output, errors, hasCodeRun, success } =
     useRunCode(tsClient, codeRef, quiz.target_output);
 
-  async function saveQuiz() {
-    setLoading(true);
-
-    const now = new Date();
-    const insertQuiz: SaveQuiz = {
-      ...quiz,
-      solution: codeRef.current,
-      explanation: {
-        steps: explanation.steps,
-      },
-      created_at: now,
-      updated_at: now,
-      created_by: session.user.id,
-    };
-
-    // Insert the quiz without a friendly ID
-    // Note that friendly ID isn't required, it's just helpful for debugging
-    const { data: insertData, error: insertError } = await supabase
-      .from("quizzes")
-      .insert(insertQuiz);
-    setLoading(false);
-    if (insertError) throw insertError;
-
-    // Generate the friendly (hashed) ID for the created quiz
-    const insertedId = insertData[0].id;
-    const hashedId = hashids.encode(insertedId);
-
-    const url = `${process.env.NEXT_PUBLIC_HOME_URL}/q/${hashedId}`;
-    setCreatedUrl(url);
-
-    // Update the quiz to include the friendly ID
-    await supabase
-      .from("quizzes")
-      .update({ friendly_id: hashedId })
-      .eq("id", insertedId);
-  }
+  useEffect(() => {
+    if (success) {
+      onSolution?.(codeRef.current);
+    }
+  }, [success]);
 
   return (
     <>
@@ -118,22 +70,7 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
             hasCodeRun={hasCodeRun}
             output={output}
             height="20rem"
-          >
-            {explanation.selectedStep && (
-              <LineSelector
-                lines={explanation.selectedStep?.lines}
-                onChange={(lines) => {
-                  explanation.udpateStep(explanation.selectedStep.id, {
-                    lines,
-                  });
-                }}
-              />
-            )}
-
-            {/* {explanation.selectedStep && (
-              <Step step={explanation.selectedStep} />
-            )} */}
-          </RunCodeEditor>
+          />
 
           <div className="px-4 pt-8 sm:px-0">
             <button
@@ -169,85 +106,9 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
             </label>
             <OutputEditor output={output} height="10rem" />
           </div>
-          <div>
-            <div className="flex justify-between items-center h-8 mt-8 mb-4">
-              <label className="block pt-2 pb-2 text-sm font-medium text-white">
-                Explanation of Solution
-              </label>
-              <button
-                onClick={() => explanation.addStep()}
-                className="relative flex items-center px-4  text-sm font-medium text-white transition rounded-md font-ibm gradient-cta hover:scale-105 disabled:hover:scale-100 disabled:opacity-50 h-8"
-              >
-                Add Step
-              </button>
-            </div>
-            <div>
-              {explanation.steps.length === 0 && (
-                <p className="text-white text-sm opacity-60 my-4">
-                  No steps yet, but explanation is optional.
-                </p>
-              )}
-              {explanation.steps.map((step, i) => (
-                <div
-                  key={step.id}
-                  tabIndex={0}
-                  onMouseDown={() => explanation.selectStep(step.id)}
-                  className={
-                    explanation.selectedStep?.id === step.id
-                      ? "bg-white bg-opacity-10 p-6 rounded-xl"
-                      : "p-6 rounded-xl"
-                  }
-                >
-                  <label
-                    htmlFor={step.id}
-                    className="block pb-2 text-sm font-medium text-white"
-                  >
-                    <p>Step {i + 1}</p>
-                  </label>
-                  <div className="flex">
-                    <input
-                      type="text"
-                      className="flex-1 block w-full py-4 text-white bg-gray-600 bg-opacity-25 border-0 focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 sm:text-sm rounded-xl"
-                      value={step.message}
-                      placeholder="Explanation"
-                      onChange={(e) =>
-                        explanation.udpateStep(step.id, {
-                          message: e.target.value,
-                        })
-                      }
-                    />
-                    <div className="w-4" />
-                    <NumberArrayInput
-                      type="text"
-                      className="w-40 block w-full py-4 text-white bg-gray-600 bg-opacity-25 border-0 focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 sm:text-sm rounded-xl"
-                      value={step.lines}
-                      onChange={(lines) => {
-                        explanation.udpateStep(step.id, {
-                          lines,
-                        });
-                      }}
-                      placeholder="Line Numbers"
-                    />
-                    <div className="w-4" />
-                    <button
-                      className="relative flex items-center px-4  text-sm font-medium text-white rounded-xl font-ibm h-100 bg-gray-600 bg-opacity-25 hover:bg-opacity-40"
-                      onMouseDown={(e) => {
-                        e.stopPropagation();
-                      }}
-                      onClick={(e) => {
-                        explanation.removeStep(step.id);
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
-      <div className="justify-end pt-5 mt-6 right-64">
+      {/* <div className="justify-end pt-5 mt-6 right-64">
         <div className="flex items-center justify-end space-x-4">
           <button
             type="submit"
@@ -258,8 +119,8 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
             Save
           </button>
         </div>
-      </div>
-      {createdUrl ? (
+      </div> */}
+      {/* {createdUrl ? (
         <span className="text-lg text-white">
           Quiz created successfully!{" "}
           <a className="font-medium underline" href={createdUrl}>
@@ -268,7 +129,7 @@ export default function ShowQuiz({ quiz, profile, session }: PropTypes) {
         </span>
       ) : (
         <span />
-      )}
+      )} */}
     </>
   );
 }

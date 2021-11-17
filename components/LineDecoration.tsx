@@ -19,8 +19,9 @@ const LineDecoration: FC<LineDecorationProps> = ({
 
   useEffect(() => {
     if (editor && monaco) {
-      prevDecorationsRef.current = editor?.deltaDecorations(
-        prevDecorationsRef.current || [],
+      // add decorations
+      const delta = editor?.deltaDecorations(
+        [],
         [
           {
             range: new monaco.Range(line, 1, line, 1),
@@ -32,6 +33,10 @@ const LineDecoration: FC<LineDecorationProps> = ({
           },
         ]
       );
+      return () => {
+        // dispose of decorations
+        editor?.deltaDecorations(delta, []);
+      };
     }
   }, [editor, monaco, line, lineClass]);
 
