@@ -1,7 +1,15 @@
-import { useLayoutEffect, useRef, FC, ReactNode } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  FC,
+  ReactNode,
+  useEffect,
+  Children,
+} from "react";
 import { useMonaco } from "@monaco-editor/react";
 import { useEditor } from "./Editor";
 import ReactDOM from "react-dom";
+import useForceUpdate from "../hooks/useForceUpdate";
 
 interface ContentWidgetProps {
   children: any;
@@ -16,6 +24,8 @@ const ContentWidget: FC<ContentWidgetProps> = ({
 }) => {
   const monaco = useMonaco();
   const editor = useEditor();
+  const ref = useRef(null);
+  const forceUdpate = useForceUpdate();
 
   useLayoutEffect(() => {
     if (editor) {
@@ -27,24 +37,27 @@ const ContentWidget: FC<ContentWidgetProps> = ({
           return widgetId;
         },
         getDomNode: function () {
-          if (!this.domNode) {
-            this.domNode = document.createElement("div");
-            this.domNode.style.position = "relative";
-            this.domNode.style.width = 0;
+          if (!ref.current) {
+            ref.current = document.createElement("div");
+            ref.current.style.position = "relative";
+            ref.current.style.width = 0;
+            ref.current.classList.add("content-widget-portal");
           }
-          return this.domNode;
+          return ref.current;
         },
         afterRender: function () {
           ReactDOM.render(
-            <div
-              onMouseOver={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-            >
-              {children}
-            </div>,
-            this.domNode
+            <Test>
+              <div
+                onMouseOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
+                {children}
+              </div>
+            </Test>,
+            ref.current
           );
         },
         getPosition: function () {
@@ -53,7 +66,7 @@ const ContentWidget: FC<ContentWidgetProps> = ({
               lineNumber: line,
               column: 0,
             },
-            preference: [monaco.editor.ContentWidgetPositionPreference.ABOVE],
+            preference: [monaco.editor.ContentWidgetPositionPreference.EXACT],
           };
         },
       };
@@ -62,9 +75,21 @@ const ContentWidget: FC<ContentWidgetProps> = ({
         editor.removeContentWidget(contentWidget);
       };
     }
-  }, [editor, children]);
+  }, [editor, children, forceUdpate]);
+
+  if (!ref.current) return null;
 
   return null;
 };
 
 export default ContentWidget;
+
+const Test = ({ children }) => {
+  useEffect(() => {
+    console.info("mounting");
+    return () => {
+      console.info("unmounting");
+    };
+  }, []);
+  return children;
+};

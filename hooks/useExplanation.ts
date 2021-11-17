@@ -9,9 +9,13 @@ const useExplanation = (
   const [selected, setSelected] = useState<string | null>(defaultSelected);
   const [steps, setSteps] = useState<ExplanationStep[]>(defaultSteps);
 
-  const addStep = () => {
+  const addStep = ({ index = steps.length } = {}) => {
     const id = nanoid();
-    setSteps((prev) => [...prev, { id, message: "", lines: [] }]);
+    setSteps((prev) => {
+      const copy = [...prev];
+      copy.splice(index, 0, { id, message: "", lines: [] });
+      return copy;
+    });
     setSelected(id);
   };
 

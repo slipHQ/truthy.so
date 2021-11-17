@@ -15,7 +15,6 @@ const LineDecoration: FC<LineDecorationProps> = ({
 }) => {
   const monaco = useMonaco();
   const editor = useEditor();
-  const prevDecorationsRef = useRef([]);
 
   useEffect(() => {
     if (editor && monaco) {
@@ -39,6 +38,10 @@ const LineDecoration: FC<LineDecorationProps> = ({
       };
     }
   }, [editor, monaco, line, lineClass]);
+
+  useEffect(() => {
+    editor?.render();
+  });
 
   return null;
 };

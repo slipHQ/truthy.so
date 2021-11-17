@@ -156,8 +156,8 @@ export default function ShowQuiz({ quiz, profile }: PropTypes) {
             >
               {explanation.selectedStep && (
                 <Step
-                  stepNumber={explanation.selectedStepIndex}
                   step={explanation.selectedStep}
+                  steps={explanation.steps}
                   onPrev={() => explanation.selectPrev()}
                   onNext={() => explanation.selectNext()}
                 />

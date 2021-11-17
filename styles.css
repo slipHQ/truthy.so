@@ -93,3 +93,8 @@ body {
 .remove-icon:hover {
   background-color: #000;
 }
+
+.evaluation-step {
+  left: -400px;
+  top: 0;
+}

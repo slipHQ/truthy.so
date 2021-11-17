@@ -57,15 +57,25 @@ export default function ExplanationForm({ onChange, solution }: PropTypes) {
                   lines={explanation.selectedStep?.lines}
                   onChange={(lines) => {
                     explanation.udpateStep(explanation.selectedStep.id, {
-                      lines,
+                      lines: lines.sort(),
                     });
                   }}
                 />
                 <Step
                   step={explanation.selectedStep}
-                  stepNumber={explanation.selectedStepIndex}
+                  steps={explanation.steps}
                   onPrev={() => explanation.selectPrev()}
                   onNext={() => explanation.selectNext()}
+                  onNew={() => {
+                    explanation.addStep({
+                      index: explanation.selectedStepIndex + 1,
+                    });
+                  }}
+                  onMessageChange={(message) => {
+                    explanation.udpateStep(explanation.selectedStep.id, {
+                      message,
+                    });
+                  }}
                   includeHighlights={false}
                 />
               </>
