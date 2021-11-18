@@ -1,28 +1,19 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
-import Hashids from "hashids";
-import { Session } from "@supabase/supabase-js";
-import Confetti from "react-dom-confetti";
-import useRunCode from "../hooks/useRunCode";
-import { Explanation, ExplanationStep, SaveQuiz } from "../types";
-import useTypescript from "../hooks/useTypescript";
-import { Profile, Quiz } from "../types";
-import { confettiConfig } from "../utils/confettiConfig";
-import OutputEditor from "./OutputEditor";
-import RunCodeEditor from "./RunCodeEditor";
-import { supabase } from "../utils/supabaseClient";
-import { nanoid } from "nanoid";
-import { NumberArrayInput } from "./ComplexInput";
+import React, { useEffect } from "react";
+import { Explanation } from "../types";
 import Step from "./Step";
 import useExplanation from "../hooks/useExplanation";
 import LineSelector from "./LineSelector";
 import Editor from "./Editor";
 
-type PropTypes = {
+type ExplanationFormProps = {
   solution: string;
   onChange?: (explanation: Explanation) => void;
 };
 
-export default function ExplanationForm({ onChange, solution }: PropTypes) {
+export default function ExplanationForm({
+  onChange,
+  solution,
+}: ExplanationFormProps) {
   const explanation = useExplanation([]);
 
   useEffect(() => {
