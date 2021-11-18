@@ -4,8 +4,14 @@ export type Quiz = {
   description: string;
   start_code: string;
   target_output: string;
+  solution: string;
+  explanation?: Explanation;
   language: string;
   views?: string;
+};
+
+export type Explanation = {
+  steps: ExplanationStep[];
 };
 
 export type Profile = {
@@ -18,4 +24,10 @@ export type SaveQuiz = Quiz & {
   created_at: Date;
   updated_at: Date;
   created_by: string;
+};
+
+export type ExplanationStep = {
+  id: string;
+  message: string;
+  lines: number[];
 };
