@@ -40,6 +40,7 @@ body {
 
 .editor-highlight-line {
   background-color: #333;
+  z-index: -1;
 }
 
 .gradient-border {
@@ -100,7 +101,7 @@ body {
 }
 
 .evaluation-step-edit {
-  left: -400px;
+  left: -404px;
   top: -8px;
 }
 

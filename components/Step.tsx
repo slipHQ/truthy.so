@@ -55,7 +55,7 @@ const Step: FC<StepProps> & StepNamespace = ({
             className="p-2 relative gradient-border"
             style={{ backgroundColor: "#161110" }}
           >
-            {mode === Mode.View && <p className="my-2">{step.message}</p>}
+            {mode === Mode.View && <p className="my-2 mx-1">{step.message}</p>}
             {mode === Mode.Edit && (
               <textarea
                 key={step.id}
