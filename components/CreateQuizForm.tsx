@@ -1,7 +1,7 @@
 import { Session } from "@supabase/supabase-js";
 import React, { FormEvent, useEffect, useState } from "react";
 import Hashids from "hashids";
-import classNames from "clsx";
+import classNames from "classnames";
 import { Profile, SaveQuiz, Explanation } from "../types";
 import Editor from "@monaco-editor/react";
 import { supabase } from "../utils/supabaseClient";
@@ -103,7 +103,7 @@ export default function CreateQuizForm({
             key="description"
             name="description"
             label="Enter a description"
-            sublabel="Introduce your quiz and let users know what they should make the code do."
+            sublabel="Introduce your quiz and let users know what they should make the code output to the console."
           >
             <textarea
               id="description"
@@ -168,6 +168,7 @@ export default function CreateQuizForm({
           </p>
         </div>
         <PreviewQuiz
+          key={startCode}
           quiz={{
             language: "typescript",
             description,
@@ -198,7 +199,18 @@ export default function CreateQuizForm({
 
   return (
     <>
-      {steps[formStep]}
+      <div className={classNames(formStep !== FormStep.Task && "hidden")}>
+        {steps[FormStep.Task]}
+      </div>
+      <div className={classNames(formStep !== FormStep.Solution && "hidden")}>
+        {steps[FormStep.Solution]}
+      </div>
+      <div
+        className={classNames(formStep !== FormStep.Explanation && "hidden")}
+      >
+        {steps[FormStep.Explanation]}
+      </div>
+      {/* {steps[formStep]} */}
       <div className="pt-5 mt-6">
         <div className="flex justify-between">
           <div className="space-x-4">

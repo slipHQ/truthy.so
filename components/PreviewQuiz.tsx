@@ -108,28 +108,6 @@ export default function ShowQuiz({ quiz, profile, onSolution }: PropTypes) {
           </div>
         </div>
       </div>
-      {/* <div className="justify-end pt-5 mt-6 right-64">
-        <div className="flex items-center justify-end space-x-4">
-          <button
-            type="submit"
-            className="px-20 py-4 font-medium text-white transition gradient-cta rounded-xl focus:ring-2 focus:ring-white hover:scale-105 disabled:opacity-50"
-            disabled={!success}
-            onClick={saveQuiz}
-          >
-            Save
-          </button>
-        </div>
-      </div> */}
-      {/* {createdUrl ? (
-        <span className="text-lg text-white">
-          Quiz created successfully!{" "}
-          <a className="font-medium underline" href={createdUrl}>
-            {createdUrl}
-          </a>
-        </span>
-      ) : (
-        <span />
-      )} */}
     </>
   );
 }
