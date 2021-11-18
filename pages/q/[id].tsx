@@ -192,7 +192,7 @@ export default function ShowQuiz({ quiz, profile }: PropTypes) {
             </button>
           </div>
 
-          {activeInterpreter.errors.length && (
+          {activeInterpreter.errors.length > 0 && (
             <div>
               <label className="block pt-8 pb-2 text-sm font-medium text-white">
                 Errors
