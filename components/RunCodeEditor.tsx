@@ -56,7 +56,6 @@ export default function RunCodeEditor(props: PropTypes) {
           padding: { top: 15, bottom: 4 },
           renderLineHighlight: "none",
           readOnly: props.readOnly,
-          glyphMargin: true,
         }}
         onMount={handleEditorDidMount}
       >

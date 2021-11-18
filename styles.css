@@ -94,7 +94,20 @@ body {
   background-color: #000;
 }
 
-.evaluation-step {
+.evaluation-step-view {
+  left: -380px;
+  top: -8px;
+}
+
+.evaluation-step-edit {
   left: -400px;
-  top: 0;
+  top: -8px;
+}
+
+.arrow-right {
+  width: 0;
+  height: 0;
+  border-top: 16px solid transparent;
+  border-bottom: 16px solid transparent;
+  border-left: 16px solid #efbb6c;
 }

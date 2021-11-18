@@ -162,10 +162,9 @@ export default function CreateQuizForm({
     ),
     [FormStep.Solution]: (
       <div>
-        <div className="flex justify-end">
+        <div className="flex">
           <p className="text-white">
-            This is what your quiz will look like when you share it. Complete it
-            and we'll include your solution!
+            Complete your quiz and we'll include the solution!
           </p>
         </div>
         <PreviewQuiz

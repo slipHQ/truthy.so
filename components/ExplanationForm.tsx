@@ -64,6 +64,7 @@ export default function ExplanationForm({ onChange, solution }: PropTypes) {
                 <Step
                   step={explanation.selectedStep}
                   steps={explanation.steps}
+                  mode={Step.Mode.Edit}
                   onPrev={() => explanation.selectPrev()}
                   onNext={() => explanation.selectNext()}
                   onNew={() => {

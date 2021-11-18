@@ -158,6 +158,7 @@ export default function ShowQuiz({ quiz, profile }: PropTypes) {
                 <Step
                   step={explanation.selectedStep}
                   steps={explanation.steps}
+                  mode={Step.Mode.View}
                   onPrev={() => explanation.selectPrev()}
                   onNext={() => explanation.selectNext()}
                 />
