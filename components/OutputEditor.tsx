@@ -12,13 +12,13 @@ export default function OutputEditor(props: PropTypes) {
   return (
     <Editor
       height={height}
-      defaultLanguage='typescript'
+      defaultLanguage="typescript"
       value={output.join("\n")}
-      className='block w-1/2 text-white rounded-lg shadow-sm opacity-75 sm:text-sm'
-      theme='vs-dark'
+      className="block w-1/2 text-white rounded-lg shadow-sm opacity-75 sm:text-sm"
+      theme="vs-dark"
       options={{
         fontSize: 12,
-        padding: { top: 15, bottom: 4, left: 4, right: 4 },
+        padding: { top: 15, bottom: 4 },
         minimap: { enabled: false },
         readOnly: true,
         lineNumbers: "off",
