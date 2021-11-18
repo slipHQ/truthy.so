@@ -17,6 +17,12 @@ interface ContentWidgetProps {
   widgetId: string;
 }
 
+/**
+ * This component pins its children to a specific line in the editor.
+ * It's good for adding annotations to the editor.
+ * @param param0
+ * @returns
+ */
 const ContentWidget: FC<ContentWidgetProps> = ({
   widgetId,
   line,
@@ -25,7 +31,6 @@ const ContentWidget: FC<ContentWidgetProps> = ({
   const monaco = useMonaco();
   const editor = useEditor();
   const ref = useRef(null);
-  const forceUdpate = useForceUpdate();
 
   useLayoutEffect(() => {
     if (editor) {
@@ -47,16 +52,14 @@ const ContentWidget: FC<ContentWidgetProps> = ({
         },
         afterRender: function () {
           ReactDOM.render(
-            <Test>
-              <div
-                onMouseOver={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-              >
-                {children}
-              </div>
-            </Test>,
+            <div
+              onMouseOver={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              {children}
+            </div>,
             ref.current
           );
         },
@@ -75,21 +78,9 @@ const ContentWidget: FC<ContentWidgetProps> = ({
         editor.removeContentWidget(contentWidget);
       };
     }
-  }, [editor, children, forceUdpate]);
-
-  if (!ref.current) return null;
+  }, [editor, children]);
 
   return null;
 };
 
 export default ContentWidget;
-
-const Test = ({ children }) => {
-  useEffect(() => {
-    console.info("mounting");
-    return () => {
-      console.info("unmounting");
-    };
-  }, []);
-  return children;
-};

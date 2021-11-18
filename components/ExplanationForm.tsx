@@ -51,29 +51,29 @@ export default function ExplanationForm({ onChange, solution }: PropTypes) {
               glyphMargin: true,
             }}
           >
-            {explanation.selectedStep && (
+            {explanation.selected.step && (
               <>
                 <LineSelector
-                  lines={explanation.selectedStep?.lines}
+                  lines={explanation.selected.step?.lines}
                   onChange={(lines) => {
-                    explanation.udpateStep(explanation.selectedStep.id, {
+                    explanation.udpateStep(explanation.selected.step.id, {
                       lines: lines.sort(),
                     });
                   }}
                 />
                 <Step
-                  step={explanation.selectedStep}
+                  step={explanation.selected.step}
                   steps={explanation.steps}
                   mode={Step.Mode.Edit}
                   onPrev={() => explanation.selectPrev()}
                   onNext={() => explanation.selectNext()}
                   onNew={() => {
                     explanation.addStep({
-                      index: explanation.selectedStepIndex + 1,
+                      index: explanation.selected.index + 1,
                     });
                   }}
                   onMessageChange={(message) => {
-                    explanation.udpateStep(explanation.selectedStep.id, {
+                    explanation.udpateStep(explanation.selected.step.id, {
                       message,
                     });
                   }}

@@ -154,9 +154,9 @@ export default function ShowQuiz({ quiz, profile }: PropTypes) {
               height="20rem"
               readOnly
             >
-              {explanation.selectedStep && (
+              {explanation.selected.step && (
                 <Step
-                  step={explanation.selectedStep}
+                  step={explanation.selected.step}
                   steps={explanation.steps}
                   mode={Step.Mode.View}
                   onPrev={() => explanation.selectPrev()}

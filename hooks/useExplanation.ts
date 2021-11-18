@@ -2,11 +2,16 @@ import { useState } from "react";
 import { ExplanationStep } from "../types";
 import { nanoid } from "nanoid";
 
+/**
+ * Handles all of the logic related to explanation state
+ */
 const useExplanation = (
   defaultSteps: ExplanationStep[],
-  defaultSelected: string | null = null
+  defaultSelectedId: string | null = null
 ) => {
-  const [selected, setSelected] = useState<string | null>(defaultSelected);
+  const [selectedId, setSelectedId] = useState<string | null>(
+    defaultSelectedId
+  );
   const [steps, setSteps] = useState<ExplanationStep[]>(defaultSteps);
 
   const addStep = ({ index = steps.length } = {}) => {
@@ -16,31 +21,32 @@ const useExplanation = (
       copy.splice(index, 0, { id, message: "", lines: [] });
       return copy;
     });
-    setSelected(id);
+    setSelectedId(id);
   };
 
-  const removeStep = (id: string) => {
+  const removeStepById = (id: string) => {
     setSteps((prev) => prev.filter((step) => step.id !== id));
   };
 
-  const selectedStep = steps.find((step) => step.id === selected);
-
-  const selectStep = (id: string) => {
-    setSelected(id);
+  const selected = {
+    step: steps.find((step) => step.id === selectedId),
+    index: steps.findIndex((s) => s.id === selectedId),
   };
 
-  const selectedStepIndex = steps.findIndex((s) => s.id === selected);
+  const selectStepById = (id: string) => {
+    setSelectedId(id);
+  };
 
   const selectNext = () => {
-    const index = steps.findIndex((s) => s.id === selected);
+    const index = steps.findIndex((s) => s.id === selectedId);
     const nextIndex = (index + 1) % steps.length;
-    setSelected(steps[nextIndex].id);
+    setSelectedId(steps[nextIndex].id);
   };
 
   const selectPrev = () => {
-    const index = steps.findIndex((s) => s.id === selected);
+    const index = steps.findIndex((s) => s.id === selectedId);
     const nextIndex = Math.max(index - 1, 0);
-    setSelected(steps[nextIndex].id);
+    setSelectedId(steps[nextIndex].id);
   };
 
   const udpateStep = (id, patch: Partial<ExplanationStep>) => {
@@ -60,13 +66,12 @@ const useExplanation = (
 
   return {
     steps,
-    selectedStep,
-    selectedStepIndex,
-    selectStep,
+    selected,
+    selectStepById,
     selectPrev,
     selectNext,
     addStep,
-    removeStep,
+    removeStepById,
     udpateStep,
   };
 };

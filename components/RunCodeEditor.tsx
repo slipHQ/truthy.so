@@ -2,7 +2,6 @@ import { Monaco } from "@monaco-editor/react";
 import Editor from "./Editor";
 import React, { MutableRefObject, ReactNode } from "react";
 import { CustomKeyBinding, addKeyBinding } from "../utils/keyBindings";
-import LineHighlights from "./LineHighlights";
 import LineSelector from "./LineSelector";
 
 export type PropTypes = {

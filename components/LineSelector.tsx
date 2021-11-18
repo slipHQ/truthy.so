@@ -1,15 +1,9 @@
 import { useEffect, useRef, FC, useMemo } from "react";
 import { useMonaco } from "@monaco-editor/react";
 import { useEditor } from "./Editor";
-import LineHighlights from "./LineHighlights";
 import LineDecoration from "./LineDecoration";
 import useLineCount from "../hooks/useLineCount";
-
-const useLatest = <T extends any>(value: T): { readonly current: T } => {
-  const ref = useRef(value);
-  ref.current = value;
-  return ref;
-};
+import useLatest from "../hooks/useLatest";
 
 function range(size: number, startAt = 0) {
   return Array.from(new Array(size), (x, i) => i + startAt);
